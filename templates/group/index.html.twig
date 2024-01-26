@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Group index{% endblock %}
+{% block title %}Swift Transfer - Groups{% endblock %}
 
 {% block body %}
     <div class="flex h-screen my-4">
@@ -78,7 +78,7 @@
                 </div>
             </div>
             {% endfor %}
-            <a href="{{ path('app_search') }}" class="flex items-center items-justify bg-purple-500 rounded-xl cursor-pointer">
+            <a href="{{ path('app_inviteToGroup', {'selectedGroupId' : firstGroupDisplayed.id}) }}" class="flex items-center items-justify bg-purple-500 rounded-xl cursor-pointer">
                 <button class="text-white mx-auto text-center font-bold text-xl py-2 hover:text-white">&#x2795;</button>
             </a>
         </div>

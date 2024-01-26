@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Group;
 use App\Entity\Notification;
 use App\Entity\User;
 use App\Repository\GroupRepository;
@@ -10,7 +9,6 @@ use App\Repository\NotificationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,7 +55,6 @@ class ApiController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         //find contact in the repo from the id in the query
-        
         /**
         * @var User
         */
@@ -86,6 +83,31 @@ class ApiController extends AbstractController
         $em->flush();
         
         return new JsonResponse(['status' => 'Contact added'], 200);
+    }
+
+    #[Route('/get-contact', name: 'app_getContact', methods: ['GET'])]
+    public function getContact() : JsonResponse
+    {
+        /**
+         * @var User
+         */
+        $user = $this->getUser();
+
+        $result = $user->getContact();
+        $cleanedResult = [];
+        foreach($result as $contact){
+
+                $cleanedResult[] = array(
+                    'displayedName' => $contact->getDisplayedName(),
+                    'username' => $contact->getUsername(),
+                    'avatar' => $contact->getAvatar(),
+                );
+            }
+        usort($cleanedResult, function($contact1, $contact2){
+            return $contact1['displayedName'] <=> $contact2['displayedName'];
+        });
+
+        return $this->json($cleanedResult);
     }
 
     #[Route('/remove-contact', name: 'app_removeContact', methods: ['POST'])]
@@ -180,18 +202,19 @@ class ApiController extends AbstractController
         return new JsonResponse(['status' => 'Resource deleted'], 200);
     }
     
-    #[Route('/invite', name: 'app_inviteInGroup', methods: ['GET'])]
+    #[Route('/invite', name: 'app_inviteInGroup', methods: ['POST'])]
     public function inviteInGroup(Request $request, GroupRepository $groupRepo, UserRepository $userRepo,EntityManagerInterface $em): JsonResponse
     {   
         $data = json_decode($request->getContent(), true);
-        // Check if group exist
+ 
         $group = $groupRepo->find($data['groupId']);
-        if(!$group){
-            return new JsonResponse(['error' => 'Group doesn\'t exist'], 404);
-        }
+        $userInvited = $userRepo->findOneBy(array('username' => $data['invitedUser']));
 
+        // Check if group exist
+        if(!$group){
+            return new JsonResponse(['error' => 'Group does not exist'], 404);
+        }
         // Check if invited user exist
-        $userInvited = $userRepo->find($data['userId']);
         if(!$userInvited){
             return new JsonResponse(['error' => 'User doesn\'t exist'], 404);
         }
@@ -209,9 +232,10 @@ class ApiController extends AbstractController
         // Send notification to user to ask him to join
         $notif = new Notification;
         $notif->setType('group');
-        $notif->setContent($user->getDisplayedName()." has invited you to ".$group->getName());
+        $notif->setContent($user->getDisplayedName().' has invited you to '.$group->getName());
         $notif->setIsGroupId($group->getId());
         $notif->setUser($userInvited);
+        $notif->setRead(false);
 
         $em->persist($notif);
         $em->flush(); 
@@ -265,7 +289,7 @@ class ApiController extends AbstractController
         return new JsonResponse(['error' => 'Invite does not exist'], 404);
     }
 
-    #[Route('/notification-read-change', name: 'app_notificationreadChange', methods: ['PATCH'])]
+    #[Route('/notification-read-change', name: 'app_notificationReadChange', methods: ['PATCH'])]
     public function NotificationreadChange(Request $request, NotificationRepository $notifRepo, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

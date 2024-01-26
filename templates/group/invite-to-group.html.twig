@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Swift Transfer - Create group{% endblock %}
+
+{% block body %}
+    <h1 class="text-3xl text-center mt-16">Add contact to {{group.name}}</h1>
+
+<div class="flex justify-center items-center mt-16 bg-gray-100">
+    <div class="w-full max-w-md p-8 bg-white shadow-md rounded-2xl text-lg" 
+    {{ react_component('Group/GroupInvite', {'groupId' : group.id}) }}>
+    </div>
+</div>
+{% endblock %}

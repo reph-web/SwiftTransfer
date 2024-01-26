@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 export default function (props) {    
     const [read, setRead] = useState(props.read);
 
-
     function NotificationContent(){
         let extraButton = '';
         if(props.type === "group"){
@@ -38,7 +37,6 @@ export default function (props) {
                 }).catch(error => console.error('Error:', error));
 
             });          
-
         }
         return props.content + extraButton;
     }
