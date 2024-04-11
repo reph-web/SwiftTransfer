@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ContactController!{% endblock %}
+
+{% block body %}
+<ul>
+{% for user in user_list %}
+    <li>{{user.UserIdentifier}}</li>
+{% endfor %}
+</ul>
+<p>You are {{app.user.UserIdentifier}}<p>
+<p> Your contacts are <p>
+<ul>
+    <li>
+    </li>
+</ul>
+{% endblock %}

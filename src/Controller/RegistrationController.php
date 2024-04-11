@@ -27,11 +27,6 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            // add timestamp at registration
-            $user->setCreatedAt(new \DateTimeImmutable());
-            // set default avatar
-            $user->setAvatar("blank url");
-            // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
