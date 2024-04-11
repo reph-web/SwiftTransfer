@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,6 +32,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Contact>
+     */
+    #[ORM\ManyToMany(targetEntity: Contact::class, mappedBy: 'user')]
+    private Collection $contact_user;
+
+    public function __construct()
+    {
+        $this->contact_user = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,5 +117,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Contact>
+     */
+    public function getContactUser(): Collection
+    {
+        return $this->contact_user;
+    }
+
+    public function addContactUser(Contact $contactUser): static
+    {
+        if (!$this->contact_user->contains($contactUser)) {
+            $this->contact_user->add($contactUser);
+            $contactUser->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContactUser(Contact $contactUser): static
+    {
+        if ($this->contact_user->removeElement($contactUser)) {
+            $contactUser->removeUser($this);
+        }
+
+        return $this;
     }
 }
