@@ -14,4 +14,9 @@
 {% for contact in userrcontacts %}
 <li>{{contact.UserIdentifier}}</li>
 {% endfor %}
+
+1's groups :
+{% for group in userrgroups %}
+<li>{{group.name}}</li>
+{% endfor %}
 {% endblock %}
