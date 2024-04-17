@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,6 +32,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    // Create new property "contact" which is a jointable of contact list membership
+    // 
+    #[ORM\ManyToMany(targetEntity: User::class)]
+    #[ORM\JoinTable(name: "user_contact",
+        joinColumns: [new ORM\JoinColumn(name: "user_id", referencedColumnName: "id")],
+        inverseJoinColumns: [new ORM\JoinColumn(name: "contact_user_id", referencedColumnName: "id")])]
+    private Collection $contact;
+
+    /**
+     * @var Collection<int, Group>
+     */
+    #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'members')]
+    private Collection $groups;
+
+    public function __construct()
+    {
+        $this->contact = new ArrayCollection();
+        $this->groups = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,4 +127,57 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getContact(): Collection
+    {
+        return $this->contact;
+    }
+
+    public function addContact(self $contact): static
+    {
+        if (!$this->contact->contains($contact)) {
+            $this->contact->add($contact);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(self $contact): static
+    {
+        $this->contact->removeElement($contact);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroups(): Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(Group $group): static
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+            $group->addMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): static
+    {
+        if ($this->groups->removeElement($group)) {
+            $group->removeMember($this);
+        }
+
+        return $this;
+    }
+
+
 }

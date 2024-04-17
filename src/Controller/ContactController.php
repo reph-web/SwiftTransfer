@@ -15,9 +15,12 @@ class ContactController extends AbstractController
     #[Route('/contact', name: 'app_contact')]
     public function index(UserRepository $repo, EntityManagerInterface $entityManager): Response
     {
+        $user1 = $repo->find(1);
+        
         return $this->render('contact/index.html.twig', [
             'controller_name' => 'ContactController',
             'user_list' => $repo->findAll(),
+            'userrcontacts' => $user1->getContact(),
         ]);
     }
     

@@ -9,17 +9,9 @@
 {% endfor %}
 </ul>
 <p>You are {{app.user.UserIdentifier}}<p>
-<p> Your contacts are <p>
-<ul>
-    {% for contact in contacts %}
-        <li>{{contact.UserIdentifier}}</li>
-    {% endfor %}
-</ul>
 
-    {{ form_errors(form) }}
-
-    {{ form_start(form) }}
-        {{ form_row(form.user) }}
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(form) }}
+1's contacts :
+{% for contact in userrcontacts %}
+<li>{{contact.UserIdentifier}}</li>
+{% endfor %}
 {% endblock %}
