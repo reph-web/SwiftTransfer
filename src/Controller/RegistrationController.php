@@ -33,7 +33,11 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+            
+            // set the balance to 0
+            $user->setBalance(0);
 
+            //push to db
             $entityManager->persist($user);
             $entityManager->flush();
 

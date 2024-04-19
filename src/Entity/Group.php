@@ -36,9 +36,16 @@ class Group
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'groups')]
     private Collection $members;
 
+    /**
+     * @var Collection<int, Transaction>
+     */
+    #[ORM\ManyToMany(targetEntity: Transaction::class, mappedBy: 'related_group')]
+    private Collection $transactions;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,6 +121,33 @@ class Group
     public function removeMember(User $member): static
     {
         $this->members->removeElement($member);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Transaction>
+     */
+    public function getTransactions(): Collection
+    {
+        return $this->transactions;
+    }
+
+    public function addTransaction(Transaction $transaction): static
+    {
+        if (!$this->transactions->contains($transaction)) {
+            $this->transactions->add($transaction);
+            $transaction->addRelatedGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTransaction(Transaction $transaction): static
+    {
+        if ($this->transactions->removeElement($transaction)) {
+            $transaction->removeRelatedGroup($this);
+        }
 
         return $this;
     }

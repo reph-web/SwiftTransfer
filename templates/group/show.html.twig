@@ -23,6 +23,13 @@
                 <th>Created_at</th>
                 <td>{{ group.createdAt ? group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>List of Users :</th>
+                {% for user in group.members %}
+                <td>{{user.id}}  -  {{ user.email }}</td>
+                {% endfor %}
+
+            </tr>
         </tbody>
     </table>
 

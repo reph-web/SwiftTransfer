@@ -47,10 +47,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Group::class, mappedBy: 'members')]
     private Collection $groups;
 
+    /**
+     * @var Collection<int, Transaction>
+     */
+    #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'sender')]
+    private Collection $transactions_sended;
+
+    /**
+     * @var Collection<int, Transaction>
+     */
+    #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'receiver')]
+    private Collection $transactions_received;
+
+    #[ORM\Column]
+    private ?float $balance = null;
+
     public function __construct()
     {
         $this->contact = new ArrayCollection();
         $this->groups = new ArrayCollection();
+        $this->transactions_sended = new ArrayCollection();
+        $this->transactions_received = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -175,6 +192,78 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if ($this->groups->removeElement($group)) {
             $group->removeMember($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Transaction>
+     */
+    public function getTransactionSended(): Collection
+    {
+        return $this->transactions_sended;
+    }
+
+    public function addTransactionSended(Transaction $transaction): static
+    {
+        if (!$this->transactions_sended->contains($transaction)) {
+            $this->transactions_sended->add($transaction);
+            $transaction->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTransactionSended(Transaction $transaction): static
+    {
+        if ($this->transactions_sended->removeElement($transaction)) {
+            // set the owning side to null (unless already changed)
+            if ($transaction->getSender() === $this) {
+                $transaction->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Transaction>
+     */
+    public function getTransactionsReceived(): Collection
+    {
+        return $this->transactions_received;
+    }
+
+    public function addTransactionsReceived(Transaction $transactionsReceived): static
+    {
+        if (!$this->transactions_received->contains($transactionsReceived)) {
+            $this->transactions_received->add($transactionsReceived);
+            $transactionsReceived->setReceiver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTransactionsReceived(Transaction $transactionsReceived): static
+    {
+        if ($this->transactions_received->removeElement($transactionsReceived)) {
+            // set the owning side to null (unless already changed)
+            if ($transactionsReceived->getReceiver() === $this) {
+                $transactionsReceived->setReceiver(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getBalance(): ?float
+    {
+        return $this->balance;
+    }
+
+    public function setBalance(float $balance): static
+    {
+        $this->balance = $balance;
 
         return $this;
     }
