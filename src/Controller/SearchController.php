@@ -6,13 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-class FrontPageController extends AbstractController
+class SearchController extends AbstractController
 {
-    #[Route('/', name: 'app_frontPage')]
+    #[Route('/search', name: 'app_search')]
     public function index(): Response
     {
-        return $this->render('frontPage/index.html.twig', [
-            'controller_name' => 'FrontPageController',
+        return $this->render('search/index.html.twig', [
+            'controller_name' => 'SearchController',
         ]);
     }
 }

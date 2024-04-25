@@ -62,6 +62,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?float $balance = null;
 
+    #[ORM\Column(length: 40)]
+    private ?string $username = null;
+
     public function __construct()
     {
         $this->contact = new ArrayCollection();
@@ -264,6 +267,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBalance(float $balance): static
     {
         $this->balance = $balance;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): static
+    {
+        $this->username = $username;
 
         return $this;
     }
