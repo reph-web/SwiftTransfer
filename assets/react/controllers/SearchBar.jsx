@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function (props) {
+export default function () {
     const [result, setResult] = React.useState('');
 
     async function callResult(query){
@@ -12,17 +12,22 @@ export default function (props) {
     }
 
     function mapResponse(response){
-        return response.map( username => <li key={username}>{username}</li>);
+        
+        return(response.map( username => 
+            <li key={username}>
+                <a href={`profile/${username}`}>{username}</a>
+            </li>));
     }
 
     const onChangeHandler = (e) => {
+        if(!e.target.value){
+            return setResult('');
+        }
         callResult(e.target.value)
         .then(response => mapResponse(response))
         .then(mappedResponse => setResult(mappedResponse));
         console.log("typed")
     }
-
-    callResult("o").then(e => console.log(e));
     return(
         <div>
             <input 
