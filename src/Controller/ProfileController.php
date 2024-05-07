@@ -12,6 +12,9 @@ class ProfileController extends AbstractController
     #[Route('/profile/{username}', name: 'app_profile')]
     public function index($username, UserRepository $userRepo): Response
     {
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_frontPage');
+        }
         $user = $userRepo->findOneBy(['username' => $username]);
 
         if (!$user) {

@@ -6,9 +6,7 @@ use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\{AssociationField, TextField, EmailField, CollectionField};
-
-
+use EasyCorp\Bundle\EasyAdminBundle\Field\{AssociationField, TextField, EmailField, CollectionField, NumberField};
 class UserCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
@@ -25,6 +23,7 @@ class UserCrudController extends AbstractCrudController
             EmailField::new('email'),
             TextField::new('displayedName'),
             CollectionField::new('roles'),
+            NumberField::new('balance'),
             AssociationField::new('groups')
             ->setCrudController(GroupCrudController::class)
             ->formatValue(function ($value, $entity) {

@@ -6,7 +6,11 @@ module.exports = {
     "./assets/react/controllers/*.jsx"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        darkerGrotesque: ['"Darker Grotesque"', "sans-serif"],
+      },
+    },
   },
   plugins: [],
 }
