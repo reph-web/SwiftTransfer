@@ -74,8 +74,8 @@ Encore
 
     .enablePostCssLoader()
     .copyFiles({
-        from: './assets/avatar',
-        to: 'images/avatar/[path][name].[ext]',
+        from: './assets/images',
+        to: 'images/[path][name].[ext]',
     })
 ;
 

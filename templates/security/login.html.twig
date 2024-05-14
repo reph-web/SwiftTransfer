@@ -3,35 +3,39 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
-<form method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+<h1 class="text-3xl text-center mt-16">Sign in to Swift Transfer</h1>
+
+<div class="flex justify-center items-center mt-16 bg-gray-100">
+
+    <form method="post" class="w-full max-w-md p-8 bg-white shadow-md rounded-2xl text-lg">
+        {% if error %}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="inputEmail">Email</label>
+            <input type="email" placeholder="Enter an email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" autocomplete="email" required autofocus>
         </div>
-    {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2" for="inputPassword">Password</label>
+            <input type="password" placeholder="Enter a password" name="password" id="inputPassword" class="form-control block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" autocomplete="current-password" required>
+        </div>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox" name="_remember_me"> Remember me
-        </label>
-    </div>
+        <div class="flex items-center justify-between mb-6">
+            <label class="flex items-center">
+                <input type="checkbox" class="accent-purple-950 form-checkbox" name="_remember_me">
+                <span class="ml-2 text-gray-600">Remember me</span>
+            </label>
+        </div>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Sign in
-    </button>
-</form>
+        <button class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-purple-950 hover:bg-purple-700 hover:border-purple-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" type="submit">
+            Sign in
+        </button>
+    </form>
+</div>
+
 {% endblock %}

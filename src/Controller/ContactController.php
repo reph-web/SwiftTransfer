@@ -16,7 +16,7 @@ class ContactController extends AbstractController
     public function index(UserRepository $repo, EntityManagerInterface $entityManager): Response
     {
         if(!$this->getUser()){
-            return $this->redirectToRoute('app_frontPage');
+            return $this->redirectToRoute('app_login');
         }
         $user1 = $repo->find(1);
         
