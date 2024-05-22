@@ -13,43 +13,65 @@
         {% endblock %}
 
         {% block javascripts %}
-
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
     <body>
-        <nav class="bg-purple-700">
-            <div class="flex flex-wrap items-center justify-between p-4">
+        <nav id="nav" class="bg-purple-700">
+            <div class="flex flex-wrap items-center justify-between p-3">
                 <a href="{{ path('app_frontPage') }}" class="flex items-center ml-4 mr-8">
                     <img src="{{ asset('build/images/logo.png') }}" class="h-8 mr-3" alt="Swift Transfer Logo" />
                     <span class="self-center text-2xl font-bold text-white">Swift Transfer</span>
                 </a>
-                <button id="btn-menu" class="flex items-center px-3 py-2 border rounded text-purple-950 border-purple-950 hover:text-white hover:border-white md:hidden">
+                <button id="btnMenu" class="flex items-center px-3 py-2 border rounded text-purple-950 border-purple-950 hover:text-white hover:border-white md:hidden">
                     <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
                 </button>
                 <div class="hidden w-full block flex-grow md:flex md:items-center md:w-auto" id="menu">
                     <div class="text-2xl md:flex-grow text-white">
-                        <a href="{{ path('app_home') }}" class="block mt-3 md:inline-block md:mt-0 hover:text-white mr-4">
+                        <a href="{{ path('app_home') }}" class="block md:inline-block mt-3 md:mt-0 hover:text-white mr-4">
+                            <span class="md:hidden mr-2">
+                                🏠 
+                            </span>
                             home
                         </a>
-                        <a href="{{ path('app_search') }}" class="block mt-3 md:inline-block md:mt-0 hover:text-white mr-4">
+                        <a href="{{ path('app_search') }}" class="block md:inline-block hover:text-white mr-4">
+                            <span class="md:hidden mr-2">
+                                🔎
+                            </span>                            
                             search
                         </a>
-                        <a href="{{ path('app_contact') }}" class="block mt-3 md:inline-block md:mt-0 hover:text-white mr-4">
+                        <a href="{{ path('app_contact') }}" class="block md:inline-block hover:text-white mr-4">
+                            <span class="md:hidden mr-2">
+                                📇
+                            </span>                            
                             contact
                         </a>
-                        <a href="{{ path('app_group_index') }}" class="block mt-3 md:inline-block md:mt-0 hover:text-white">
+                        <a href="{{ path('app_group') }}" class="block mb-3 md:mb-0 md:inline-block hover:text-white">
+                            <span class="md:hidden mr-2">
+                                👥
+                            </span>                            
                             group
                         </a>
                     </div>
                     
                     {% if app.user %}
-                        <span> 
-                            
-                            <a href="{{ path('app_profile', {'username' : app.user.username}) }}">
+                        <span class="cursor-pointer" id="logged">
                                 <img src="{{ asset('build/images/avatar/' ~ app.user.avatar) }}" class="inline-block h-8 w-8 rounded-full mr-2">
-                            </a>
+                                <span class="text-white text-xl font-semibold">{{app.user.displayedName}}</span>
+                                <svg id="dropdownIcon" width="12" height="3" class="hidden md:inline-block">
+                                    <path d="M0 0L3 3L6 0" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"></path>
+                                </svg>
                         </span>
+                        <div id="dropdownLogged" class="absolute right-0 top-14 w-48 bg-white rounded-md shadow-lg hidden">
+                            <ul class="text-gray-700">
+                                <li>
+                                    <a href="{{ path('app_profile', {'username' : app.user.username}) }}" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_logout') }}" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
                     {% else %}
                         <div>
                             <a href="{{ path('app_login') }}" class="inline-block text-xl mt-2 px-5 pb-1 border-2 rounded-xl text-white border-purple-950 hover:border-transparent hover:text-purple-700 hover:bg-white md:mt-0 mr-3">Login</a>
@@ -61,15 +83,40 @@
                 </div>
             </div>
         </nav>
+        <script>
+                if(document.querySelector('#logged')){
+                    // if user logged, make the logged dropdown working
+                    const loggedBtn = document.querySelector('#logged')
+                    const loggedDropdown = document.querySelector('#dropdownLogged')
 
+                    // 768px = md in tailwind
+                    const mdMediaSize = window.matchMedia("(max-width: 768px)");
+
+                    // toggle dropdown if clicked
+                    loggedBtn.addEventListener('click', () => {
+                        //if the view is md, dropdown doesnt work
+                        if(!mdMediaSize.matches) {
+                            loggedDropdown.classList.toggle('hidden');
+                        }else{
+                            {% if app.user %}
+                            window.location.href = "{{ path('app_profile', {'username': app.user.username}) | escape('js') }}";
+                            {% endif %}
+                        }
+                    })
+
+                    // dismiss dropdown if clicking outside of the loggedBtn
+                    document.addEventListener('click', (e) => {
+                        if(!loggedBtn.contains(e.target)){
+                            loggedDropdown.classList.add('hidden');
+                        }
+                    })
+                }
+
+                //make the burger menu working
+                document.querySelector('#btnMenu').addEventListener('click', () => {
+                    document.querySelector('#menu').classList.toggle('hidden');
+                })
+        </script>
         {% block body %}{% endblock %}
-                    <script defer>
-                const menuBtn = document.getElementById('btn-menu');
-                const menu = document.getElementById('menu');
-
-                menuBtn.addEventListener('click', () => {
-                    menu.classList.toggle('hidden');
-                });
-            </script>
     </body>
 </html>

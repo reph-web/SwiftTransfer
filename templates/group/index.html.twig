@@ -3,37 +3,18 @@
 {% block title %}Group index{% endblock %}
 
 {% block body %}
-    <h1>Group index</h1>
+    <div id="showContact">
+    Your groups :
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Created_at</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    {% if groups is null %}
+        <p>You don't have any contacts</p>
+    {% else %}
+        <ul>
         {% for group in groups %}
-            <tr>
-                <td>{{ group.id }}</td>
-                <td>{{ group.name }}</td>
-                <td>{{ group.description }}</td>
-                <td>{{ group.createdAt ? group.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_group_show', {'id': group.id}) }}">show</a>
-                    <a href="{{ path('app_group_edit', {'id': group.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
+            <li>{{ group.name }}<li>
         {% endfor %}
-        </tbody>
-    </table>
+        </ul>
+    {% endif %}
+</div>
 
-    <a href="{{ path('app_group_new') }}">Create new</a>
 {% endblock %}

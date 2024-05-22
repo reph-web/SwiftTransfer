@@ -3,20 +3,19 @@
 {% block title %}Hello ContactController!{% endblock %}
 
 {% block body %}
-<ul>
-{% for user in user_list %}
-    <li>{{user.UserIdentifier}}</li>
-{% endfor %}
-</ul>
-<p>You are {{app.user.UserIdentifier}}<p>
 
-1's contacts :
-{% for contact in userrcontacts %}
-<li>{{contact.UserIdentifier}}</li>
-{% endfor %}
+<div id="showContact">
+    Your contacts :
 
-1's groups :
-{% for group in userrgroups %}
-<li>{{group.name}}</li>
-{% endfor %}
+    {% if contacts is null %}
+        <p>You don't have any contacts</p>
+    {% else %}
+        <ul>
+        {% for contact in contacts %}
+            <li>{{ contact.username }}<li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+
 {% endblock %}

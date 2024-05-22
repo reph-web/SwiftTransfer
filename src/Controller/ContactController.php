@@ -18,13 +18,14 @@ class ContactController extends AbstractController
         if(!$this->getUser()){
             return $this->redirectToRoute('app_login');
         }
-        $user1 = $repo->find(1);
+
+        $user = $this->getUser();
+        $contacts = $repo->find($user->getId())->getContact();
+
         
         return $this->render('contact/index.html.twig', [
             'controller_name' => 'ContactController',
-            'user_list' => $repo->findAll(),
-            'userrcontacts' => $user1->getContact(),
-            'userrgroups' => $user1->getGroups()
+            'contacts' => $contacts,
         ]);
     }
     
