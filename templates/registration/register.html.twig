@@ -3,17 +3,41 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
-
-    {{ form_errors(registrationForm) }}
-
+<h1 class="text-3xl text-center mt-16">Register to Swift Transfer</h1>
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+<div class="flex justify-center items-center mt-16 bg-gray-100">
 
-        <button type="submit" class="btn">Register</button>
+    <div class="w-full max-w-md p-8 bg-white shadow-md rounded-2xl text-lg">
+        {% if form_errors(registrationForm) %}
+            <div class="alert alert-danger">{{ form_errors(registrationForm) }}</div>
+        {% endif %}
+
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" >Username</label>
+                <input placeholder="Enter an username" value="{{ field_value(registrationForm.username) }}" name="{{ field_name(registrationForm.username) }}" class="form-control block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" required autofocus>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" >Displayed name</label>
+                <input placeholder="Enter a name" value="{{ field_value(registrationForm.displayedName) }}" name="{{ field_name(registrationForm.displayedName) }}" class="form-control block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" required autofocus>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2" >Email</label>
+                <input type="email" placeholder="Enter an email" value="{{ field_value(registrationForm.email) }}" name="{{ field_name(registrationForm.email) }}" class="form-control block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" required autofocus>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2">Password</label>
+                <input type="password" placeholder="Enter a password" value="{{ field_value(registrationForm.plainPassword) }}" name="{{ field_name(registrationForm.plainPassword) }}" class="form-control block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" required autofocus>
+            </div>
+            {{ form_row(registrationForm.agreeTerms) }}
+
+            <button type="submit" class="btn">Register</button>
+    </div>
+</div>
+
+
+        
     {{ form_end(registrationForm) }}
 {% endblock %}

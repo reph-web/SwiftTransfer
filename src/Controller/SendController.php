@@ -20,33 +20,38 @@ class SendController extends AbstractController
         $transactionForm = $this->createForm(TransactionType::class, $transaction);
         $transactionForm->handleRequest($request);
         if ($transactionForm->isSubmitted() && $transactionForm->isValid()) {
+
+            // Get data from the form
             $sender = $this->getUser();
             $receiver = $transaction->getReceiver();
             $amount = $transaction->getAmount();
-            $group = $transaction->getRelatedGroup();
             
+            // Create a new form
             $transaction->setSender($sender);
             $transaction->setCreatedAt(new \DateTimeImmutable());
             
+            // Persist in db the transaction
             $entityManager->persist($transaction);
             $entityManager->flush();
 
+            // Change the balance of receiver and sender and add transc to related groups
             $sender->setBalance($sender->getBalance() - $amount);
             $receiver->setBalance($receiver->getBalance() + $amount);
-            foreach($group as $g){
-                $g->addTransaction($transaction);
-            }
+
+            // Persist in db
             $entityManager->persist($sender);
             $entityManager->persist($receiver);
-            $entityManager->persist($group);
             $entityManager->flush();
 
+            // Display pop-up to user
             $this->addFlash('notice', "$amount sent to {$receiver->getUsername()} ");
             return $this->redirectToRoute('app_send');
         }
 
         return $this->render('send/index.html.twig', [
             'controller_name' => 'SendController',
+            'transactionForm' => $transactionForm->createView(),
+            'balance' =>  $this->getUser()->getBalance(),
         ]);
     }
 }

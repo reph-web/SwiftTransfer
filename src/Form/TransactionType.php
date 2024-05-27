@@ -18,11 +18,11 @@ class TransactionType extends AbstractType
             ->add('amount')
             ->add('receiver', EntityType::class, [
                 'class' => User::class,
-                'choice_label' => 'id',
+                'choice_label' => 'username',
             ])
             ->add('related_group', EntityType::class, [
                 'class' => Group::class,
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'multiple' => true,
             ])
         ;

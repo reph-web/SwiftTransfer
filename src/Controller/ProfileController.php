@@ -20,9 +20,23 @@ class ProfileController extends AbstractController
         if (!$user) {
             throw $this->createNotFoundException('No user found');
         }
+
+        // Check if the user profile is in contactLsInContactListist or is the user logged
+        $isInContactList = null;
+
+        /**
+        * @var User
+        */
+        $userLogged = $this->getUser();
+        foreach( $userLogged->getContact() as $c){
+            if($c->getUsername() === $username){
+                $isInContactList = true;
+            }
+        }
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
             'user' => $user,
+            'isInContactList' => $isInContactList,
         ]);
     }
 }

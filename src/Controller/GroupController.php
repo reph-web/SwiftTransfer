@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Group;
+use App\Entity\User;
 use App\Form\GroupType;
 use App\Repository\GroupRepository;
 use App\Repository\UserRepository;
@@ -18,11 +19,14 @@ class GroupController extends AbstractController
     #[Route('/', name: 'app_group', methods: ['GET'])]
     public function index(UserRepository $repo): Response
     {
+        /**
+        * @var User
+        */
         $user = $this->getUser();
+
         $groups = $repo->find($user->getId())->getGroups();
         return $this->render('group/index.html.twig', [
             'groups' => $groups,
         ]);
     }
-
 }

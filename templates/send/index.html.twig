@@ -5,13 +5,14 @@
 {% block body %}
 
 <div>
+    <h1>{{ balance }}</h1>
 
-    {{ form_errors(sendForm) }}
+    {{ form_errors(transactionForm) }}
 
-    {{ form_start(sendForm) }}
-        <div {{ react_component('SearchBar') }}></div>
-        <input type="hidden" id="reactField" name="form[reactField]" />
-    {{ form_end(sendForm) }}
+    {{ form_start(transactionForm) }}
+
+    <input class="cursor-pointer btn btn-primary bg-purple-950 text-white px-5 py-1 rounded-lg " type="submit"> Send </input>
+    {{ form_end(transactionForm) }}
 
 </div>
 {% endblock %}
