@@ -30,64 +30,21 @@
             {% endfor %}
         </ul>
     </p>
-
-
     {% if isInContactList %}
-    <div class="inline-flex">
-        <h3 class="text-2xl mr-4"> Remove to your contact </h3>
-        <button id="removeContact" data-username="{{ user.username }}" class="text-3xl btn btn-primary bg-purple-950 text-white px-2 py-1 rounded-lg" href=> - </button>
-    </div>
+        <div {{ react_component('ContactSetter', {
+            isInContactList : true,
+            username : user.username
+        })}}>
+        </div>
+
     {% elseif user.username != app.user.username %}
-    <div class="inline-flex">
-        <h3 class="text-2xl mr-4"> Add to your contact </h3>
-        <button id="addContact" data-username="{{ user.username }}" class="text-3xl btn btn-primary bg-purple-950 text-white px-2 py-1 rounded-lg" href=> + </button>
+    <div {{ react_component('ContactSetter', {
+        isInContactList : false,
+        username : user.username
+    }) }}>
     </div>
     {% endif %}
 
-
-    <script>
-        if(document.querySelector('#addContact')){
-            document.querySelector('#addContact').addEventListener('click', function() {
-                const Username = this.getAttribute('data-username');
-
-                fetch('/api/add-contact', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ contactUsername: Username })
-                })
-                .then(response =>  response.json())
-                .then(data => {
-                    if (data.status === 'Contact added') {
-                        alert('Contact added successfully!');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        }
-
-        if(document.querySelector('#removeContact')){
-            document.querySelector('#removeContact').addEventListener('click', function() {
-                const Username = this.getAttribute('data-username');
-
-                fetch('/api/remove-contact', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ contactUsername: Username })
-                })
-                .then(response =>  response.json())
-                .then(data => {
-                    if (data.status === 'Contact removed') {
-                        alert('Contact removed successfully!');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
-        }
-    </script>
 </div>
 
 {% endblock %}

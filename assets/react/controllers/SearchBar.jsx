@@ -7,7 +7,7 @@ export default function () {
 
     // Fetch data from the api
     async function callResult(query){
-        const url = 'http://localhost:9000/api/searchUpdater/' + query;
+        const url = '/api/searchUpdater/' + query;
         const resp = await fetch(url)
         const parsedResp =  await resp.json();
         const reifiedResp = await JSON.parse(parsedResp);

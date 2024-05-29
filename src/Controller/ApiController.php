@@ -28,7 +28,7 @@ class ApiController extends AbstractController
     #[Route('/add-contact', name: 'app_addContact', methods: ['POST'])]
         public function addContact(Request $request, UserRepository $userRepo, EntityManagerInterface $em): JsonResponse
         {
-            $this->denyAccessUnlessGranted('ROLE_USER');
+            //$this->denyAccessUnlessGranted('ROLE_USER');
             //Fetch data from query
             $data = json_decode($request->getContent(), true);
 
@@ -45,6 +45,16 @@ class ApiController extends AbstractController
                 return new JsonResponse(['error' => 'you can\'t add yourself in contact list'], 403);
             }
 
+            // Return error if user try to add a contact that doesn't exist
+            if(!$contact){
+                return new JsonResponse(['error' => 'contact doesn\'t exist'], 404);
+            }
+
+            // Return error if user try to add a contact already in contact list
+            if($user->getContact()->contains($contact)){
+                return new JsonResponse(['error' => 'contact already in contact list'], 403);
+            }
+
             //add contact and sent to db
 
             $user->addContact($contact);
@@ -54,7 +64,7 @@ class ApiController extends AbstractController
             return new JsonResponse(['status' => 'Contact added'], 200);
         }
     
-        #[Route('/remove-contact', name: 'app_addContact', methods: ['POST'])]
+        #[Route('/remove-contact', name: 'app_removeContact', methods: ['POST'])]
         public function removeContact(Request $request, UserRepository $userRepo, EntityManagerInterface $em): JsonResponse
         {
             $this->denyAccessUnlessGranted('ROLE_USER');
@@ -71,6 +81,16 @@ class ApiController extends AbstractController
             // Return error if user try to add himself as contact
             if($user == $contact){
                 return new JsonResponse(['error' => 'you can\'t remove yourself in contact list'], 403);
+            }
+
+            // Return error if user try to add a contact that doesn't exist
+            if(!$contact){
+                return new JsonResponse(['error' => 'contact doesn\'t exist'], 404);
+            }
+
+            // Return error if user try to add a contact already in contact list
+            if(!$user->getContact()->contains($contact)){
+                return new JsonResponse(['error' => 'contact already not in contact list'], 403);
             }
 
             //add contact and sent to db
