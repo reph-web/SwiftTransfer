@@ -23,7 +23,6 @@ class ProfileController extends AbstractController
 
         // Check if the user profile is in contactLsInContactListist or is the user logged
         $isInContactList = null;
-
         /**
         * @var User
         */
@@ -33,10 +32,22 @@ class ProfileController extends AbstractController
                 $isInContactList = true;
             }
         }
+
+        // Find common groups
+        $commonGroups = [];
+        foreach($userLogged->getGroups() as $group){
+            foreach($user->getGroups() as $group2){
+                if($group->getId() === $group2->getId()){
+                    $commonGroups[] = $group;
+                    }
+            }
+        }
+
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
             'user' => $user,
             'isInContactList' => $isInContactList,
+            'commonGroups' => $commonGroups
         ]);
     }
 }

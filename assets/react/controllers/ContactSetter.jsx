@@ -15,7 +15,6 @@ export default function (props) {
         .then(response =>  response.json())
         .then(data => {
             if (data.status === 'Contact removed') {
-                alert('Contact removed successfully!');
                 setIsInContactList(false);
             }
         })
@@ -33,7 +32,6 @@ export default function (props) {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'Contact added') {
-                alert('Contact added successfully!');
                 setIsInContactList(true);
             }
         })
@@ -42,17 +40,11 @@ export default function (props) {
     };
     
     return (
-        <div>
+        <div class="flex place-content-center space-x-4 mx-auto">
             {isInContactList ? (
-                <div>
-                    <span>Remove from contact list</span>
-                    <button onClick={removeContact}>-</button>
-                </div>
+                    <button class="bg-purple-600 text-white px-4 py-2 rounded-full" onClick={removeContact}>Remove from contact list</button>
             ) : (
-                <div>
-                    <span>Add to contact list</span>
-                    <button onClick={addContact}>+</button>
-                </div>
+                    <button class="bg-purple-600 text-white px-4 py-2 rounded-full" onClick={addContact}>Add to Contact List</button>
             )}
         </div>
     );
