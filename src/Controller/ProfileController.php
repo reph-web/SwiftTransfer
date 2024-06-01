@@ -27,7 +27,7 @@ class ProfileController extends AbstractController
         * @var User
         */
         $userLogged = $this->getUser();
-        foreach( $userLogged->getContact() as $c){
+        foreach($userLogged->getContact() as $c){
             if($c->getUsername() === $username){
                 $isInContactList = true;
             }

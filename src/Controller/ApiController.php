@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Group;
+use App\Repository\GroupRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 #[Route('/api', name: 'app_api')]
 class ApiController extends AbstractController
 {
-    #[Route('/searchUpdater/{searchedUser?}', name: 'app_searchUpdater', methods: ['GET'])]
+        #[Route('/searchUpdater/{searchedUser?}', name: 'app_searchUpdater', methods: ['GET'])]
         public function searchUpdater($searchedUser, UserRepository $userRepo): JsonResponse
         {
             $this->denyAccessUnlessGranted('ROLE_USER');
@@ -25,7 +27,7 @@ class ApiController extends AbstractController
             return $this->json(json_encode($cleanedResult));
         }
 
-    #[Route('/add-contact', name: 'app_addContact', methods: ['POST'])]
+        #[Route('/add-contact', name: 'app_addContact', methods: ['POST'])]
         public function addContact(Request $request, UserRepository $userRepo, EntityManagerInterface $em): JsonResponse
         {
             //$this->denyAccessUnlessGranted('ROLE_USER');
@@ -101,7 +103,56 @@ class ApiController extends AbstractController
             return new JsonResponse(['status' => 'Contact removed'], 200);
         }
     
+        #[Route('/change-group-name/{groupId}', name: 'app_changeGroupName', methods: ['POST'])]
+        public function changeGroupName($groupId, Request $request, GroupRepository $groupRepo, EntityManagerInterface $em): JsonResponse
+        {
+            $group = $groupRepo->find($groupId);
+            if(!$group){
+                return new JsonResponse(['error' => 'group doesn\'t exist'], 404);
+            }
 
+            if($this->getUser() != $group->getOwner()){
+                return new JsonResponse(['error' => 'your are not the owner'], 403);
+            }
+            $data = json_decode($request->getContent(), true);
+            $group->setName($data['name']);
+            $em->persist($group);
+            $em->flush();
+        }
+
+        #[Route('/change-description/{groupId}', name: 'app_changeDescription', methods: ['POST'])]
+        public function changeDescription($groupId, Request $request, GroupRepository $groupRepo, EntityManagerInterface $em): JsonResponse
+        {
+            $group = $groupRepo->find($groupId);
+            if(!$group){
+                return new JsonResponse(['error' => 'group doesn\'t exist'], 404);
+            }
+
+            if($this->getUser() != $group->getOwner()){
+                return new JsonResponse(['error' => 'your are not the owner'], 403);
+            }
+            $data = json_decode($request->getContent(), true);
+            $group->setDescription($data['description']);
+            $em->persist($group);
+            $em->flush();
+        }
+
+        #[Route('/delete-group/{groupId}', name: 'app_delete-group', methods: ['POST'])]
+        public function deleteGroup($groupId, Request $request, GroupRepository $groupRepo, EntityManagerInterface $em): JsonResponse
+        {
+            $group = $groupRepo->find($groupId);
+            if(!$group){
+                return new JsonResponse(['error' => 'group doesn\'t exist'], 404);
+            }
+
+            if($this->getUser() != $group->getOwner()){
+                return new JsonResponse(['error' => 'your are not the owner'], 403);
+            }
+            $data = json_decode($request->getContent(), true);
+            $group->setDescription($data['description']);
+            $em->persist($group);
+            $em->flush();
+        }
         
     
 }

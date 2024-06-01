@@ -17,23 +17,6 @@ class GroupType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('created_at', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('owner', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('members', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
-            ->add('transactions', EntityType::class, [
-                'class' => Transaction::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
         ;
     }
 
