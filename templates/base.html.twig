@@ -17,7 +17,7 @@
         {% endblock %}
     </head>
     <body>
-        <nav id="nav" class="bg-purple-700">
+        <nav id="nav" class="bg-purple-500">
             <div class="flex flex-wrap items-center justify-between p-3">
                 <a href="{{ path('app_frontPage') }}" class="flex items-center ml-4 mr-8">
                     <img src="{{ asset('build/images/logo.png') }}" class="h-8 mr-3" alt="Swift Transfer Logo" />
@@ -46,12 +46,28 @@
                             </span>                            
                             contact
                         </a>
-                        <a href="{{ path('app_group') }}" class="block mb-3 md:mb-0 md:inline-block hover:text-white">
+                        {% if is_granted("ROLE_ADMIN") %}
+                        <a href="{{ path('app_group') }}" class="block md:inline-block mr-4">
                             <span class="md:hidden mr-2">
                                 👥
                             </span>                            
                             group
                         </a>
+                        <a href="{{ path('admin') }}" class="block mb-6 md:mb-0 md:inline-block">
+                            <span class="md:hidden mr-2">
+                                🔓
+                            </span>                            
+                            admin panel
+                        </a>
+                        {% else %}
+                        <a href="{{ path('app_group') }}" class="block mb-6 md:mb-0 md:inline-block">
+                            <span class="md:hidden mr-2">
+                                👥
+                            </span>                            
+                            group
+                        </a>
+                        {% endif %}
+
                     </div>
                     
                     {% if app.user %}

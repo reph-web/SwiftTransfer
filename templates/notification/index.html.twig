@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+
+<h1 class="text-3xl text-center mt-16">Notifications</h1>
+<div class="flex justify-center items-center mt-16 bg-gray-100">
+    <div class="w-full max-w-md p-8 bg-white shadow-md rounded-2xl text-lg">
+        {% if notification is empty %}
+            No notification
+        {% else %}
+            <ul>
+            {% for n in notification %}
+            <li>
+                <div>
+                    <h1>{{n.type}}</h1>
+                    <button>˅</button>
+                </div>
+                <div class="hidden">
+                    {{n.content}}
+                    {% if n.type == "group" %}
+                        <a href="{{ path('app_acceptInvite', 'user': app.user, 'group' : n.ifGroupId) }}"></a>
+                        <a href="{{ path('app_declineInvite', 'notifId': n.id) }}
+                </div> 
+            </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

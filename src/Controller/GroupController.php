@@ -52,7 +52,7 @@ class GroupController extends AbstractController
 
     }
 
-    #[Route('/create-group', name: 'app_createGroup', methods: ['GET'])]
+    #[Route('/create-group', name: 'app_createGroup', methods: ['GET', 'POST'])]
     public function createGroup(Request $request, EntityManagerInterface $em): Response
     {
         if (!$this->getUser()) {
@@ -73,6 +73,7 @@ class GroupController extends AbstractController
             //add creation time and owner
             $group->setCreatedAt(new \DateTimeImmutable());
             $group->setOwner($user);
+            $user->addGroup($group);
             
             $em->persist($group);
             $em->flush();
@@ -84,5 +85,4 @@ class GroupController extends AbstractController
             'groupForm' => $form,
         ]);
     }
-
 }

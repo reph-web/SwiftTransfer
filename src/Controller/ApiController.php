@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Group;
+use App\Entity\Notification;
+use App\Entity\User;
 use App\Repository\GroupRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\UserRepository;
@@ -22,7 +24,11 @@ class ApiController extends AbstractController
             $result = $userRepo->findBySearchBar($searchedUser);
             $cleanedResult = [];
             foreach($result as $user){
-                $cleanedResult[] = $user->getUsername();
+                $cleanedResult[] = array(
+                    'username'=> $user->getUsername(),
+                    'displayedName' => $user->getDisplayedName(),
+                    'avatar' => $user->getAvatar(),
+                );
             }
             return $this->json(json_encode($cleanedResult));
         }
@@ -137,7 +143,7 @@ class ApiController extends AbstractController
             $em->flush();
         }
 
-        #[Route('/delete-group/{groupId}', name: 'app_delete-group', methods: ['POST'])]
+        #[Route('/delete-group/{groupId}', name: 'app_deleteGroup', methods: ['POST'])]
         public function deleteGroup($groupId, Request $request, GroupRepository $groupRepo, EntityManagerInterface $em): JsonResponse
         {
             $group = $groupRepo->find($groupId);
@@ -154,5 +160,59 @@ class ApiController extends AbstractController
             $em->flush();
         }
         
+        #[Route('invite/{groupId}/{userId}', name: 'app_inviteInGroup', methods: ['POST'])]
+        public function inviteInGroup($groupId, $userId, GroupRepository $groupRepo, UserRepository $userRepo,EntityManagerInterface $em): JsonResponse
+        {
+            //Check if group exist
+            $group = $groupRepo->find($groupId);
+            if(!$group){
+                return new JsonResponse(['error' => 'group doesn\'t exist'], 404);
+            }
+
+            //Check if invited user exist
+            $userInvited = $userRepo->find($userId);
+            if(!$userInvited){
+                return new JsonResponse(['error' => 'user doesn\'t exist'], 404);
+            }
+
+            /**
+             * @var User
+            **/
+            $user = $this->getUser();
+
+            //Check if user has rights to invite
+            if($user != $group->getOwner()){
+                return new JsonResponse(['error' => 'your are not the owner'], 403);
+            }
+            
+            //add user to the group (for the moment, i will create a notification system later)
+            $notif = new Notification;
+            $notif->setType('group', 
+                $user->getDisplayedName()." has invited you to ".$group->getName(),
+                $group->getId()
+            );
+        
+            $userInvited->addNotification($notif);
+        }
     
+        #[Route('acceptInvite/{notificationId}', name: 'app_acceptInvite', methods: ['GET'])]
+        public function acceptInvite($notificationId, GroupRepository $groupRepo,EntityManagerInterface $em): JsonResponse
+        {
+            /**
+            * @var User
+            */
+            $user = $this->getUser();
+
+            //search if user got an invite
+            foreach($user->getNotification() as $notif){
+                if($notif->getId() == $notificationId && $notif->getType() == "group"){
+                    $group = $groupRepo->find($notif->getIfGroupId());
+                    $group->addMember($user);
+                    $em->persist($group);
+                    $em->flush();
+                }
+
+            }
+            return new JsonResponse(['error' => 'invite doesn\'t exist'], 404);
+        }
 }

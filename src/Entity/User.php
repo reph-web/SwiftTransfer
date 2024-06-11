@@ -74,12 +74,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $avatar = null;
 
+    /**
+     * @var Collection<int, Notification>
+     */
+    #[ORM\ManyToMany(targetEntity: Notification::class, mappedBy: 'user')]
+    private Collection $notification;
+
     public function __construct()
     {
         $this->contact = new ArrayCollection();
         $this->groups = new ArrayCollection();
         $this->transactions_sended = new ArrayCollection();
         $this->transactions_received = new ArrayCollection();
+        $this->notification = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -332,6 +339,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // Retourne le username
         return $this->username ;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotification(): Collection
+    {
+        return $this->notification;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notification->contains($notification)) {
+            $this->notification->add($notification);
+            $notification->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notification->removeElement($notification)) {
+            $notification->removeUser($this);
+        }
+
+        return $this;
     }
 
 

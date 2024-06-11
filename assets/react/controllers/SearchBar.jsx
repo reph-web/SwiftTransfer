@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react';
 export default function () {
     // Init state result
     const [result, setResult] = useState('');
-    const searchDropdownRef = useRef(null);
+    const searchDivRef = useRef(null);
 
     // Fetch data from the api
     async function callResult(query){
@@ -14,18 +14,22 @@ export default function () {
         return reifiedResp;
     }
 
-    // Autocomplete input when clicking on a result
-    const onClickChoiceHandler = (e) => {
-        document.querySelector('#SearchBar').value = e.target.innerText;
-        searchDropdownRef.current.classList.add('hidden');
-    }
-
     // create <li> list from the response fetched
     function mapResponse(response){
-        return(response.map( username => 
-            <li key={username} onClick={onClickChoiceHandler}>
-                {username}
-            </li>));
+        let completeList = [];
+        for( let user of response){
+            completeList.push(
+            <a href={'/profile/' + user.username}>
+                <li className='mt-3 bg-purple-500 rounded-2xl text-white' key={user.username}>
+                    <img src={'/build/images/avatar/' + user.avatar} className='inline-block h-6 w-6 rounded-full mx-2 mb-1'/>
+                    <span className='font-semibold'>{user.displayedName}
+                        <span className='ml-2 font-normal text-md'>@{ user.username }</span>
+                    </span>
+                </li>
+            </a>
+            )
+        };
+        return completeList;
     }
 
     // Update the result list in on input change
@@ -35,35 +39,24 @@ export default function () {
             return setResult('');
         }
 
-        // open the dropdown if typing in input
-        if(searchDropdownRef.current){
-            searchDropdownRef.current.classList.remove('hidden');
-        }
-
         // fetch data on change of input value
         callResult(e.target.value)
         .then(response => mapResponse(response))
         .then(mappedResponse => setResult(mappedResponse));
     }
-
-    document.addEventListener('click', (e) => {
-        if(!searchDropdownRef.current.contains(e.target)){
-            searchDropdownRef.current.classList.add('hidden');
-        }
-    });
     // return the HTML of the component
     return(
-        <div>
+        <div className = 'flex flex-wrap justify-items-center item-start'>
             <input 
                 id = 'SearchBar'
-                className ="border border-black rounded-md" 
-                placeholder='Enter query'
+                className = ' p-2 mx-auto border-2 border-purple-500 rounded-md w-64 h-8 '
+                placeholder='&nbsp;Enter query'
                 onChange={onChangeHandler}
             ></input>
             
             <div
-                className = "absolute bg-white rounded-md shadow-lg cursor-pointer hidden"
-                ref = {searchDropdownRef}
+                ref = {searchDivRef}
+                className='w-2/3 mx-auto self-start'
             >
                 <ul>{result}</ul>
             </div>

@@ -24,8 +24,6 @@ class ContactController extends AbstractController
         */
         $user = $this->getUser();
         $contacts = $repo->find($user->getId())->getContact();
-
-
         
         return $this->render('contact/index.html.twig', [
             'controller_name' => 'ContactController',

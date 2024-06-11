@@ -7,14 +7,21 @@
                 <h1 class="text-5xl mb-6 font-medium">Swift Transfer</h1>
                 <p class="text-xl">Welcome to the new era of simplified money transfers. With SwiftTransfer you have the power to send money to your friends, family, or colleagues  in just a few clicks, wherever you are in the world.</p>
                 <div class="text-xl">
-                    <input class="border-2 rounded-lg border-purple-950 mt-6 pl-2 py-1" type="text">
-                    <button class="btn btn-primary bg-purple-950 text-white px-5 py-1 rounded-lg ">
-                        <span class="">Start now !</span>
+                    <input placeholder="Enter your email" class="border-2 rounded-lg border-purple-500 mt-6 pl-2 py-1" type="text">
+                    <button id="sub-fp" class="bg-purple-500 text-white px-5 py-1 rounded-lg mb-2">
+                        <div>Start now !</div>
                     </button>
                 </div>
             </div>
-
             <img src="https://img.freepik.com/vecteurs-libre/concept-collegues-design-plat-pour-page-destination_23-2148296956.jpg">
         </div>
+
+        <script>
+            document.querySelector('#sub-fp').addEventListener('click', ()=>{
+                window.location.href= 'http://localhost:9000/register/'+ document.querySelector('input').value;
+            })
+
+        </script>
+
     </div>
 {% endblock %}

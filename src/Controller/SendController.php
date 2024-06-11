@@ -22,6 +22,9 @@ class SendController extends AbstractController
         if ($transactionForm->isSubmitted() && $transactionForm->isValid()) {
 
             // Get data from the form
+            /**
+            * @var User
+            */
             $sender = $this->getUser();
             $receiver = $transaction->getReceiver();
             $amount = $transaction->getAmount();
