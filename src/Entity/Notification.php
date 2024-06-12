@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\NotificationRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NotificationRepository::class)]
@@ -15,56 +13,22 @@ class Notification
     #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'type')]
-    private Collection $user;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 20)]
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
     private ?string $content = null;
 
+    #[ORM\ManyToOne(inversedBy: 'notifications')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     #[ORM\Column]
-    private ?bool $is_read = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?int $if_group_id = null;
-
-    public function __construct()
-    {
-        $this->user = new ArrayCollection();
-    }
+    private ?bool $isRead = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUser(): Collection
-    {
-        return $this->user;
-    }
-
-    public function addUser(User $user): static
-    {
-        if (!$this->user->contains($user)) {
-            $this->user->add($user);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): static
-    {
-        $this->user->removeElement($user);
-
-        return $this;
     }
 
     public function getType(): ?string
@@ -91,26 +55,26 @@ class Notification
         return $this;
     }
 
-    public function isRead(): ?bool
+    public function getUser(): ?User
     {
-        return $this->is_read;
+        return $this->user;
     }
 
-    public function setRead(bool $is_read): static
+    public function setUser(?User $user): static
     {
-        $this->is_read = $is_read;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getIfGroupId(): ?int
+    public function isRead(): ?bool
     {
-        return $this->if_group_id;
+        return $this->isRead;
     }
 
-    public function setIfGroupId(?int $if_group_id): static
+    public function setRead(bool $isRead): static
     {
-        $this->if_group_id = $if_group_id;
+        $this->isRead = $isRead;
 
         return $this;
     }

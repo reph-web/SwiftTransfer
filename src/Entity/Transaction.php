@@ -84,7 +84,7 @@ class Transaction
     /**
      * @return Collection<int, Group>
      */
-    public function getRelatedGroup(): Collection
+    public function getRelatedGroup(): ?Collection
     {
         return $this->related_group;
     }

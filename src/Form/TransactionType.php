@@ -24,6 +24,7 @@ class TransactionType extends AbstractType
                 'class' => Group::class,
                 'choice_label' => 'name',
                 'multiple' => true,
+                'required' => false
             ])
         ;
     }

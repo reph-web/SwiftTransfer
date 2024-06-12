@@ -2,18 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Notification;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Transaction;
 use App\Form\TransactionType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class SendController extends AbstractController
 {
     #[Route('/send', name: 'app_send')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo): Response
     {
         $transaction = new Transaction();
 
@@ -25,7 +27,8 @@ class SendController extends AbstractController
             /**
             * @var User
             */
-            $sender = $this->getUser();
+            $user = $this->getUser();
+            $sender = $userRepo->find($user->getId());
             $receiver = $transaction->getReceiver();
             $amount = $transaction->getAmount();
             
@@ -41,13 +44,27 @@ class SendController extends AbstractController
             $sender->setBalance($sender->getBalance() - $amount);
             $receiver->setBalance($receiver->getBalance() + $amount);
 
+            // Create notification
+            $sender_notif = new Notification;
+            $sender_notif->setUser($sender);
+            $sender_notif->setType('transaction');
+            $sender_notif->setContent('You sent $'.$amount.' to '.$receiver->getDisplayedName());
+            $sender_notif->setRead(false);
+
+
+            $receiver_notif = new Notification;
+            $receiver_notif->setUser($receiver);
+            $receiver_notif->setType('transaction');
+            $receiver_notif->setContent('You received $'.$amount.' from '.$sender->getDisplayedName());
+            $receiver_notif->setRead(false);
+
             // Persist in db
             $entityManager->persist($sender);
+            $entityManager->persist($sender_notif);
             $entityManager->persist($receiver);
+            $entityManager->persist($receiver_notif);
             $entityManager->flush();
-
-            // Display pop-up to user
-            $this->addFlash('notice', "$amount sent to {$receiver->getUsername()} ");
+            
             return $this->redirectToRoute('app_send');
         }
 
