@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 export default function (props) {
     const [isInContactList, setIsInContactList] = useState(props.isInContactList);
 
-
     function removeContact(){
         fetch('/api/remove-contact', {
             method: 'POST',

@@ -1,44 +1,30 @@
 import React, { useState } from 'react';
 
 export default function (props) {
-    const [isInGroup, setIsInContactList] = useState(props.isInContactList);
+    const [i, setI] = useState(props.isInContactList);
 
-
-    function inviteGroup(){
-        fetch('/api/invite-to-group', {
+    function inviteGroup(props){
+        fetch(`/api/invite/${props.groupId}/${props.userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ contactUsername: props.username })
+            body: JSON.stringify(
+                {
+                    groupId: props.groupId,
+                    userId: props.userId
+                }
+            )
         })
         .then(response =>  response.json())
         .then(data => {
             if (data.status === 'Contact removed') {
-                setIsInContactList(false);
+                
             }
         })
         .catch(error => console.error('Error:', error));
     };
-    
-    function addContact(){
-        fetch('/api/add-contact', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ contactUsername: props.username })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'Contact added') {
-                setIsInContactList(true);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-        
-    };
-    
+
     return (
         <div class="flex place-content-center space-x-4 mx-auto">
             {isInContactList ? (

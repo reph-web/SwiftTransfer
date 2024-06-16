@@ -49,7 +49,7 @@ export default function () {
         <div className = 'flex flex-wrap justify-items-center item-start'>
             <input 
                 id = 'SearchBar'
-                className = ' p-2 mx-auto border-2 border-purple-500 rounded-md w-64 h-8 '
+                className = 'p-2 mx-auto border-2 border-purple-500 rounded-md w-64 h-8'
                 placeholder='&nbsp;Enter query'
                 onChange={onChangeHandler}
             ></input>

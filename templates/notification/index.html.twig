@@ -13,16 +13,11 @@
             <ul>
             {% for n in notifications %}
             <li>
-                <div>
-                    <h1>{{n.type}}</h1>
-                    <button class="showNotifications">˅</button>
-                </div>
-                <div class="hidden notifications">
-                    {{n.content}}
-                    {% if n.type == "group" %}
-                        <a href="{{ path('app_acceptInvite', {'user': app.user, 'group' : n.ifGroupId}) }}"></a>
-                        <a href="{{ path('app_declineInvite', {'notifId': n.id}) }}">
-                    {% endif %}
+                <div  {{ react_component('NotificationDisplay', {
+                    'id' : n.id,
+                    'type' : n.type,
+                    'content' : n.content
+                })}}>
                 </div> 
             </li>
             {% endfor %}
@@ -31,26 +26,26 @@
     </div>
 </div>
 
-<script>
-let btnToggle = document.querySelectorAll('button.showNotifications');
-console.log()
-if(btnToggle){
+// <script>
+// let btnToggle = document.querySelectorAll('button.showNotifications');
+// console.log()
+// if(btnToggle){
     
-    if(Array.isArray(btnToggle)){
-        for(b of btnToggle){
-            b.addEventListener('click', (e)=>{
-                notification = e.target.parentNode.nextElementSibling;
-                notification.classList.toggle('hidden');
-            })
-        }
-    }else{
-        btnToggle.addEventListener('click', (e)=>{
-            console.log(e.target.parentNode);
-            notification = e.target.parentNode.nextElementSibling;
-            notification.classList.toggle('hidden');
-        })
-    }
+//     if(Array.isArray(btnToggle)){
+//         for(b of btnToggle){
+//             b.addEventListener('click', (e)=>{
+//                 notification = e.target.parentNode.nextElementSibling;
+//                 notification.classList.toggle('hidden');
+//             })
+//         }
+//     }else{
+//         btnToggle.addEventListener('click', (e)=>{
+//             console.log(e.target.parentNode);
+//             notification = e.target.parentNode.nextElementSibling;
+//             notification.classList.toggle('hidden');
+//         })
+//     }
 
-}
-</script>
+// }
+// </script>
 {% endblock %}

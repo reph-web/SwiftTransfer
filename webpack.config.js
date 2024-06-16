@@ -35,6 +35,7 @@ Encore
     /*
      * FEATURE CONFIG
      *
+}
      * Enable & configure other features below. For a full
      * list of features, see:
      * https://symfony.com/doc/current/frontend.html#adding-more-features

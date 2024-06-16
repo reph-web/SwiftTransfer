@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class NotificationController extends AbstractController
 {
     #[Route('/notification', name: 'app_notification')]
-    public function index(NotificationRepository $notif): Response
+    public function index(): Response
     {
         /**
         * @var User
