@@ -12,21 +12,22 @@
         {% else %}
             <ul>
             {% for n in notifications %}
-            <li>
-                <div  {{ react_component('NotificationDisplay', {
-                    'id' : n.id,
-                    'type' : n.type,
-                    'content' : n.content
-                })}}>
-                </div> 
-            </li>
+                <li>
+                    <div  {{ react_component('NotificationDisplay', {
+                        'id' : n.id,
+                        'type' : n.type,
+                        'content' : n.content,
+                        'read' : n.read
+                    })}}>
+                    </div> 
+                </li>
             {% endfor %}
             </ul>
         {% endif %}
     </div>
 </div>
 
-// <script>
+ <script>
 // let btnToggle = document.querySelectorAll('button.showNotifications');
 // console.log()
 // if(btnToggle){
@@ -47,5 +48,5 @@
 //     }
 
 // }
-// </script>
+ </script>
 {% endblock %}

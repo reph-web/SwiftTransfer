@@ -7,7 +7,7 @@ export default function () {
 
     // Fetch data from the api
     async function callResult(query){
-        const url = '/api/searchUpdater/' + query;
+        const url = '/api/group-search/' + query;
         const resp = await fetch(url)
         const parsedResp =  await resp.json();
         const reifiedResp = await JSON.parse(parsedResp);
@@ -17,14 +17,11 @@ export default function () {
     // create <li> list from the response fetched
     function mapResponse(response){
         let completeList = [];
-        for( let user of response){
+        for( let group of response ){
             completeList.push(
-            <a href={'/profile/' + user.username}>
-                <li className='mt-3 bg-purple-500 rounded-2xl text-white' key={user.username}>
-                    <img src={'/build/images/avatar/' + user.avatar} className='inline-block h-6 w-6 rounded-full mx-2 mb-1'/>
-                    <span className='font-semibold'>{user.displayedName}
-                        <span className='ml-2 font-normal text-md'>@{ user.username }</span>
-                    </span>
+            <a href={'/group/' + group.id}>
+                <li className='mt-3 bg-purple-500 rounded-2xl text-white' key={group.id}>
+                    <span className='ml-2 font-normal text-md'>{group.name}</span>
                 </li>
             </a>
             )
@@ -48,7 +45,7 @@ export default function () {
     return(
         <div className = 'flex flex-wrap justify-items-center item-start'>
             <input 
-                id = 'SearchBar'
+                id = 'GroupSearch'
                 className = 'p-2 mx-auto border-2 border-purple-500 rounded-md w-64 h-8'
                 placeholder='&nbsp;Enter query'
                 onChange={onChangeHandler}
@@ -63,4 +60,3 @@ export default function () {
         </div>
     );
 }
-

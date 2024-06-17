@@ -56,7 +56,7 @@ class GroupController extends AbstractController
     public function createGroup(Request $request, EntityManagerInterface $em): Response
     {
         if (!$this->getUser()) {
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_login');
         }
 
         /**

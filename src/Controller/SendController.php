@@ -17,17 +17,21 @@ class SendController extends AbstractController
     #[Route('/send', name: 'app_send')]
     public function index(Request $request, EntityManagerInterface $entityManager, UserRepository $userRepo): Response
     {
-        $transaction = new Transaction();
+        if(!$this->getUser()){
+            return $this->redirectToRoute('app_login');
+        }
 
+        /**
+        * @var User
+        */
+        $user = $this->getUser();
+
+        $transaction = new Transaction();
         $transactionForm = $this->createForm(TransactionType::class, $transaction);
         $transactionForm->handleRequest($request);
         if ($transactionForm->isSubmitted() && $transactionForm->isValid()) {
 
             // Get data from the form
-            /**
-            * @var User
-            */
-            $user = $this->getUser();
             $sender = $userRepo->find($user->getId());
             $receiver = $transaction->getReceiver();
             $amount = $transaction->getAmount();
@@ -71,7 +75,7 @@ class SendController extends AbstractController
         return $this->render('send/index.html.twig', [
             'controller_name' => 'SendController',
             'transactionForm' => $transactionForm->createView(),
-            'balance' =>  $this->getUser()->getBalance(),
+            'balance' =>  $user->getBalance(),
         ]);
     }
 }

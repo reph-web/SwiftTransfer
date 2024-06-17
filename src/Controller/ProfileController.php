@@ -13,7 +13,7 @@ class ProfileController extends AbstractController
     public function index($username, UserRepository $userRepo): Response
     {
         if(!$this->getUser()){
-            return $this->redirectToRoute('app_frontPage');
+            return $this->redirectToRoute('app_login');
         }
         $user = $userRepo->findOneBy(['username' => $username]);
 
