@@ -38,11 +38,14 @@
                         </span>
                     </div>
                     <div class="ml-4">
-                        <p class="text-gray-700 font-semibold text-2xl ml-2">{{firstGroupDisplayed.name}}
+                        
                         {% if app.user.id == firstGroupDisplayed.owner.id %}
-                        <button id="changeName">⚙️</button>
+                        <div  {{ react_component('Group/GroupNameModifier', {
+                            'value' : firstGroupDisplayed.name,
+                            'id' : firstGroupDisplayed.id,
+                        })}}></div>
                         {% endif %}
-                        </p>
+                        
                         <span class=" text-gray-700 text-xl font-semibold">Group Owner:</span>
                         {{firstGroupDisplayed.owner.displayedName}}
                         </br>
@@ -82,21 +85,18 @@
     </div>
 
     <script>
-    const BtnName = document.querySelector("#changeName");
-    const BtnDesc = document.querySelector("#changeDesc");
+    
+    // const BtnName = document.querySelector("#changeName");
+    // const BtnDesc = document.querySelector("#changeDesc");
 
-    function modal(){
-        SWAL!!!
-    }
-
-    if(BtnName || BtnDesc){
-        BtnName.addEventListener('click', (e)=>{
+    // if(BtnName || BtnDesc){
+    //     BtnName.addEventListener('click', (e)=>{
             
-        });
-        BtnDesc.addEventListener('click', ()=>{
+    //     });
+    //     BtnDesc.addEventListener('click', ()=>{
 
-        });
-    }
+    //     });
+    // }
 
 
     </script>

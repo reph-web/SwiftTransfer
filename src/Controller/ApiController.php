@@ -140,6 +140,7 @@ class ApiController extends AbstractController
         $group->setName($data['name']);
         $em->persist($group);
         $em->flush();
+        return new JsonResponse(['status' => 'Resource updated, new name :'.$data['name']], 200);
     }
 
     #[Route('/change-description', name: 'app_changeDescription', methods: ['PATCH'])]
@@ -159,6 +160,7 @@ class ApiController extends AbstractController
         $group->setDescription($data['description']);
         $em->persist($group);
         $em->flush();
+        return new JsonResponse(['status' => 'Resource updated'], 200);
     }
 
     #[Route('/delete-group', name: 'app_deleteGroup', methods: ['DELETE'])]
@@ -175,6 +177,7 @@ class ApiController extends AbstractController
         }
         $em->remove($group);
         $em->flush();
+        return new JsonResponse(['status' => 'Resource deleted'], 200);
     }
     
     #[Route('/invite', name: 'app_inviteInGroup', methods: ['GET'])]
@@ -211,7 +214,10 @@ class ApiController extends AbstractController
         $notif->setUser($userInvited);
 
         $em->persist($notif);
-        $em->flush();
+        $em->flush(); 
+
+        $successMessage = 'Invite sent to '.$userInvited->getUsername().' to join '.$group->getName();
+        return new JsonResponse(['status' => $successMessage], 200);
     }
 
     #[Route('/accept-invite', name: 'app_acceptInvite', methods: ['POST'])]
