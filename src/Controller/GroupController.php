@@ -19,6 +19,9 @@ class GroupController extends AbstractController
     #[Route('/group/{selectedGroupId?}', name: 'app_group', methods: ['GET'])]
     public function index($selectedGroupId, GroupRepository $groupRepo): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
         /**
         * @var User
         */
@@ -28,6 +31,7 @@ class GroupController extends AbstractController
         //no arg = 1st group displayed
         if(!$selectedGroupId){
             return $this->render('group/index.html.twig', [
+                'controller_name' => 'ContactController',
                 'groups' => $groups,
                 'firstGroupDisplayed' => $groups[0],
             ]);
@@ -47,9 +51,21 @@ class GroupController extends AbstractController
             ]);
         }else{
             return new Response($this->render('group/forbidden.html.twig', [
+                'controller_name' => 'ContactController',
             ]), 403);
         }
 
+    }
+
+    #[Route('/invite-to-group/{selectedGroupId?}', name: 'app_group', methods: ['GET', 'POST'])]
+    public function inviteToGroup($selectedGroupId, GroupRepository $groupRepo): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        return $this->render('group/create-group.html.twig', [
+            'controller_name' => 'GroupController',
+        ]);
     }
 
     #[Route('/create-group', name: 'app_createGroup', methods: ['GET', 'POST'])]
@@ -58,7 +74,6 @@ class GroupController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-
         /**
         * @var User
         */

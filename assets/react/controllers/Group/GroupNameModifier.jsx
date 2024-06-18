@@ -53,10 +53,10 @@ export default function (props) {
         <div id={'modal' + uniqueId} className = "absolute inset-0 bg-gray-900 bg-opacity-50 h-dvh w-dvh">
             <div id={'contentBox' + uniqueId} className ="flex flex-nowrap justify-between flex-col mx-auto mt-32 w-72 bg-white rounded-xl">
                 <div className='text-xl text-center font-semibold mt-4'>Group Name</div>
-                <input id={'input' + uniqueId} className='mx-auto my-6 text-2xl rounded-lg border-2 border-purple-500' defaultValue={value}/>
+                <input id={'input' + uniqueId} className='mx-auto my-6 pl-2 text-2xl rounded-lg border-2 border-purple-500' defaultValue={value}/>
                 <div className='mx-auto mb-4'>
-                    <button id="confirmModalBtn" className="bg-purple-500 text-white px-5 py-1 rounded-lg mr-4" onClick={confirmHandler}>Confirm</button>
-                    <button id="cancelModalBtn" className="bg-red-600 text-white px-5 py-1 rounded-lg ml-4" onClick={cancelHandler}>Cancel</button>
+                    <button id="confirmModalBtn" className="bg-purple-500 text-white text-lg px-5 py-1 rounded-lg mr-4" onClick={confirmHandler}>Confirm</button>
+                    <button id="cancelModalBtn" className="bg-red-600 text-white text-lg px-5 py-1 rounded-lg ml-4" onClick={cancelHandler}>Cancel</button>
                 </div>
             </div>
         </div>
@@ -66,8 +66,8 @@ export default function (props) {
     return(
         <>
             {modal}
-            <p className='text-gray-700 font-semibold text-2xl ml-2'>{value}</p>
-            <button id={'modalOpener' + uniqueId} onClick={()=>{setModal(<Modal/>);}}>⚙️</button>
+            <span className='text-gray-700 font-semibold text-2xl ml-2'>{value}</span>
+            <button className='ml-2' id={'modalOpener' + uniqueId} onClick={()=>{setModal(<Modal/>);}}>⚙️</button>
         </>
     )
 

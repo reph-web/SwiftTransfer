@@ -143,7 +143,7 @@ class ApiController extends AbstractController
         return new JsonResponse(['status' => 'Resource updated, new name :'.$data['name']], 200);
     }
 
-    #[Route('/change-description', name: 'app_changeDescription', methods: ['PATCH'])]
+    #[Route('/change-group-description', name: 'app_changeGroupDescription', methods: ['PATCH'])]
     public function changeDescription(Request $request, GroupRepository $groupRepo, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

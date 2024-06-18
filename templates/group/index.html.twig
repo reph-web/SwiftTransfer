@@ -40,10 +40,10 @@
                     <div class="ml-4">
                         
                         {% if app.user.id == firstGroupDisplayed.owner.id %}
-                        <div  {{ react_component('Group/GroupNameModifier', {
-                            'value' : firstGroupDisplayed.name,
-                            'id' : firstGroupDisplayed.id,
-                        })}}></div>
+                            <div  {{ react_component('Group/GroupNameModifier', {
+                                'value' : firstGroupDisplayed.name,
+                                'id' : firstGroupDisplayed.id,
+                            })}}></div>
                         {% endif %}
                         
                         <span class=" text-gray-700 text-xl font-semibold">Group Owner:</span>

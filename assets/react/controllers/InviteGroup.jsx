@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 export default function (props) {
 
+
+
     function inviteGroup(){
         fetch(`/api/invite`, {
             method: 'POST',
@@ -20,7 +22,7 @@ export default function (props) {
 
     document.querySelector('invite').addEventListener('click', inviteGroup);
     return (
-        <button id='invite 'class='bg-purple-500 text-white px-5 py-1 rounded-lg ml-4'>
+        <button id='invite' class='bg-purple-500 text-white px-5 py-1 rounded-lg ml-4'>
             Invite
         </button>
     );
