@@ -74,7 +74,7 @@ class SendController extends AbstractController
 
         return $this->render('send/index.html.twig', [
             'controller_name' => 'SendController',
-            'transactionForm' => $transactionForm->createView(),
+            'form' => $transactionForm->createView(),
             'balance' =>  $user->getBalance(),
         ]);
     }

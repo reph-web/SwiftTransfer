@@ -25,7 +25,7 @@ class RegistrationFormType extends AbstractType
                     'message' => 'Your username can\'t be empty.'
                 ]),
                 new Length([
-                    'min' => 2,
+                    'min' => 3,
                     'max' => 40,
                     'minMessage' => 'Your username should be at least {{ limit }} characters',
                     'maxMessage' => 'Your username is limited to {{ limit }} characters.'

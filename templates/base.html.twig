@@ -46,6 +46,12 @@
                             </span>                            
                             contact
                         </a>
+                        <a href="{{ path('app_send') }}" class="block md:inline-block hover:text-white mr-4">
+                            <span class="md:hidden mr-2">
+                                🤝
+                            </span>    
+                            send
+                        </a>
                         {% if is_granted("ROLE_ADMIN") %}
                         <a href="{{ path('app_group') }}" class="block md:inline-block mr-4">
                             <span class="md:hidden mr-2">
@@ -85,6 +91,9 @@
                                 </li>
                                 <li>
                                     <a href="{{ path('app_logout') }}" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('app_notification') }}" class="block px-4 py-2 hover:bg-gray-100">Notifications</a>
                                 </li>
                             </ul>
                         </div>

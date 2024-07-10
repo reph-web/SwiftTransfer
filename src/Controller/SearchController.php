@@ -31,7 +31,6 @@ class SearchController extends AbstractController
             'controller_name' => 'SearchController',
             'pagination' => $pagination,
             'searchQuery' => $searchQuery,
-
         ]);
     }
 }

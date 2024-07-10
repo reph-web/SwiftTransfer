@@ -59,10 +59,14 @@
             </div>
             <div>
                 <p class="text-gray-700 text-lg mb-4 text-xl font-semibold">Transactions</p>
-                <div class="bg-white p-4 rounded-lg flex-1">
-                {% for transac in firstGroupDisplayed.transactions %}
-                    <span class="my-2">- {{transac.sender.username}} to {{transac.receiver.username}} : ${{transac.amount}}</span>
-                {% endfor %}
+                <div class="bg-white p-4 rounded-lg flex-1 max-h-72">
+                    <ul>
+                    {% for transac in firstGroupDisplayed.transactions %}
+                        <li class="my-2">
+                            <span>- {{transac.sender.username}} to {{transac.receiver.username}} : ${{transac.amount}}</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
