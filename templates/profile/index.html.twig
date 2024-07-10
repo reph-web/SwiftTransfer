@@ -41,20 +41,21 @@
                         <span class="text-nowrap overflow-hidden text-ellipsis">{{group.name}}</span>
                 </div>
                 {% endfor %}
+            </div>
             {% else %}
             <p class="text-gray-600 mb-6 text-2xl">No group in common</p>
             {% endif %}
                     {# Contacts section #}
 
             {% if isInContactList %}
-            <div {{ react_component('ContactSetter', {
+            <div class="w-full" {{ react_component('ContactSetter', {
                 isInContactList : true,
                 username : user.username
             })}}>
             </div>
 
             {% elseif user.username != app.user.username %}
-            <div {{ react_component('ContactSetter', {
+            <div class="w-full" {{ react_component('ContactSetter', {
                 isInContactList : false,
                 username : user.username
             }) }}>
@@ -70,7 +71,7 @@
                     </modal>  #}
             </div>
             {% endif %}
-            </div>
+
         </div>
     </div>
 

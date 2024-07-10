@@ -72,9 +72,6 @@ Encore
 
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
-    .autoProvideVariables({
-        Swal: require.resolve('sweetalert2'),
-    })
     .enablePostCssLoader()
     .copyFiles({
         from: './assets/images',

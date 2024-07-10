@@ -4,9 +4,41 @@
 
 {% block body %}
 <div class="flex justify-center items-center">
-    <div class="mt-16 w-full max-w-2xl p-8 bg-white shadow-md rounded-2xl text-2xl">
-        <h1 class="text-center text-3xl text-gray-700 mb-4">Search</h1>
-        <div class="h-96" {{ react_component('UserSearch') }}>
+    <div class=" mt-16 w-full max-w-2xl p-8 bg-white shadow-md rounded-2xl text-2xl elements-center">
+        <h1 class="text-center text-3xl text-gray-700 mb-4 w-full">Search</h1>
+            <form method="get" action="{{ path('app_search') }}">
+                <div class="flex justify-center items-center space-x-2">
+                    <input class="px-3 py border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:border-purple-500" type="text" name="q" value="{{ searchQuery }}" placeholder="Search users">
+                    <button type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1.75rem" viewBox="0 -960 960 960" width="1.75rem" fill="#0f172a">
+                            <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z">
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <ul>
+                {% if searchQuery == '' %}
+                        <li> Start your search! </li>
+                {% else %}
+                    {% for user in pagination %}
+                    <a href="{{ path('app_profile', {'username' : user.username}) }}">
+                        <li class='mt-3 bg-purple-500 rounded-2xl text-white mx-24' key={{user.username}}>
+                            <img src="{{ asset('build/images/avatar/' ~ app.user.avatar) }}" class='inline-block h-6 w-6 rounded-full mx-2 mb-1'/>
+                            <span class='font-semibold'>{{ user.displayedName }}
+                                <span class='ml-2 font-normal text-md'>@{{ user.username }}</span>
+                            </span>
+                        </li>
+                    </a>
+                    {% else %}
+                        <li class="text-center font-medium text-2xl mt-4">No users found</li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+
+            <div class="pagination">
+                {{ knp_pagination_render(pagination) }}
+            </div>
         </div>
     </div>
 </div>

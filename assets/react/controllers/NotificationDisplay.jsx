@@ -1,44 +1,39 @@
 import React, { useState } from 'react';
 
-
-
 export default function (props) {    
     const [read, setRead] = useState(props.read);
 
-    function NotificationContent(){
-        let extraButton = '';
+    function IfGroupNotificationContent(){
+        let extraButton = null;
         if(props.type === "group"){
             extraButton = <div>
-                <button id="accept">Accept Invite</button>
-                <button id="decline">Decline Invite</button>
+                <button className="py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-purple-950 hover:bg-purple-700 hover:border-purple-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                    onClick={() => handleAcceptClick(props.id)}>Accept Invite</button>
+                <button  className="py-2 px-4 border border-transparent rounded-md shadow-sm font-medium text-white bg-purple-950 hover:bg-purple-700"
+                    onClick={() => handleDeclineClick(props.id)}>Decline Invite</button>
             </div>;
-            
-            document.querySelector('#accept').addEventListener('click', ()=>{
-                fetch('/acceptInvite', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        notificationId: props.id
-                    })
-                }).catch(error => console.error('Error:', error));
-            });
-
-            document.querySelector('#decline').addEventListener('click', ()=>{
-                fetch('/declineInvite', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        notificationId: props.id
-                    })
-                }).catch(error => console.error('Error:', error));
-
-            });          
         }
-        return props.content + extraButton;
+        return extraButton;
+    }
+
+    function handleAcceptClick(notificationId) {
+        fetch('/accept-invite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ notificationId })
+        }).catch(error => console.error('Error:', error));
+    }
+
+    function handleDeclineClick(notificationId) {
+        fetch('/decline-invite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ notificationId })
+        }).catch(error => console.error('Error:', error));
     }
     
     function toggleHandler(id){
@@ -74,7 +69,8 @@ export default function (props) {
                 </div>
 
                 <div notificationid={props.id} className='hidden'>
-                    <NotificationContent/>
+                    {props.content}
+                    <IfGroupNotificationContent/>
                 </div>
             </>)
 }

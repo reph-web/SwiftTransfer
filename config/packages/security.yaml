@@ -23,10 +23,7 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 target: app_frontPage
-                clear_site_data:
-                    - cache
-                    - storage
-                    - executionContexts
+            
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800
