@@ -268,6 +268,32 @@ class ApiController extends AbstractController
         return new JsonResponse(['error' => 'Invite does not exist'], 404);
     }
 
+    #[Route('/remove-invite-group', name: 'app_removeInviteGroup', methods: ['DELETE'])]
+    public function removeUserGroup(Request $request, GroupRepository $groupRepo, UserRepository $userRepo, EntityManagerInterface $em): JsonResponse
+    {
+        /**
+        * @var User
+        */
+        $user = $this->getUser();
+
+        //Is user has right to remove
+
+        $groupId = json_decode($request->getContent(), true)['GroupId'];
+        $group = $groupRepo->find($groupId);
+        if($group->getOwner() != $user){
+            return new JsonResponse(['error' => 'You do not have the right to remove this user'], 403);
+        }
+    
+        $usernameToRemove = json_decode($request->getContent(), true)['memberUsername'];
+        $userToRemove = $userRepo->findOneBy(['username' => $usernameToRemove]);
+        $group->removeMember($userToRemove);
+        $em->persist($group);
+        $em->flush();
+        
+        return new JsonResponse(['success' => 'User successfully removed'], 200);
+        
+    }
+
     #[Route('/decline-invite', name: 'app_declineInvite', methods: ['POST'])]
     public function declineInvite(Request $request, EntityManagerInterface $em): JsonResponse
     {

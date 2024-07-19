@@ -12,7 +12,7 @@
                 <a href="{{ path('app_group', {'selectedGroupId': group.id}) }}">
                     <div class="flex items-center mb-2 bg-white rounded-xl p-1 hover:bg-purple-400 max-x-16">
                         <span class="w-7 h-7 bg-purple-400 rounded-full mr-2">
-                            <span class="ml-3" style="">{{group.name|u.truncate(1)}}</span>
+                            <span class="ml-3">{{group.name|u.truncate(1)}}</span>
                         </span>
                         <p class="text-gray-700 hover:text-white overflow-hidden whitespace-nowrap overflow-ellipsis mr-2">{{group.name}}</p>
                         {% if app.user.id == group.owner.id %}
@@ -38,12 +38,16 @@
                         </span>
                     </div>
                     <div class="ml-4">
-                        
                         {% if app.user.id == firstGroupDisplayed.owner.id %}
                             <div  {{ react_component('Group/GroupNameModifier', {
                                 'value' : firstGroupDisplayed.name,
                                 'id' : firstGroupDisplayed.id,
+                            })}}>
+                            </div>
+                            <div  {{ react_component('Group/GroupDelete', {
+                                'id' : firstGroupDisplayed.id,
                             })}}></div>
+
                         {% endif %}
                         
                         <span class=" text-gray-700 text-xl font-semibold">Group Owner:</span>
@@ -64,6 +68,10 @@
                     {% for transac in firstGroupDisplayed.transactions %}
                         <li class="my-2">
                             <span>- {{transac.sender.username}} to {{transac.receiver.username}} : ${{transac.amount}}</span>
+                        </li>
+                        {% else %}
+                        <li class="my-2">
+                            <span>No transactions yet</span>
                         </li>
                     {% endfor %}
                     </ul>
