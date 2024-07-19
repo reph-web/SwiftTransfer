@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Swift Transfer - Groups{% endblock %}
+
+{% block body %}
+ <div class="flex flex-nowrap flex-col items-align justify-center mt-16">
+    <div class="text-3xl text-center">
+        No group here, you can :
+    </div>
+    <a class="mx-auto" href="{{ path('app_createGroup') }}">
+        <button class=" mt-2 text-xl mx-auto bg-purple-400 hover:text-white px-4 py-2 rounded-xl">Create a new group</button>
+    </a>
+
+    
+ </div>
+{% endblock %}

@@ -22,14 +22,24 @@ class GroupController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+
         /**
         * @var User
         */
         $user = $this->getUser();
         $groups = $user->getGroups();
         
-        //no arg = 1st group displayed
+        // No group = redirect to special page
+        if(!$groups[0]){
+            return $this->render('group/no-group.html.twig', [
+                'controller_name' => 'ContactController',
+            ]);
+    }
+
+        // No arg = 1st group displayed
+
         if(!$selectedGroupId){
+
             return $this->render('group/index.html.twig', [
                 'controller_name' => 'ContactController',
                 'groups' => $groups,
@@ -39,6 +49,7 @@ class GroupController extends AbstractController
         
         $selectedGroup = $groupRepo->find($selectedGroupId);
 
+        // If specified group doesn't exist, redirect
         if(!$selectedGroup){
             return new Response($this->render('group/not-found.html.twig', [
             ]), 404);
