@@ -70,16 +70,25 @@ class GroupController extends AbstractController
 
     #[Route('/invite-to-group/{selectedGroupId}', name: 'app_inviteToGroup', methods: ['GET'])]
     public function inviteToGroup($selectedGroupId, GroupRepository $groupRepo): Response
-    {
+    {  
+
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+        /**
+        * @var User
+        */
+        $user = $this->getUser();
+        
+        // Sent to twig, for special page if user dont have contact
+        $contacts = $user->getContact();
 
         $group = $groupRepo->find($selectedGroupId);
 
         return $this->render('group/invite-to-group.html.twig', [
             'controller_name' => 'GroupController',
             'group' => $group,
+            'contacts' => $contacts,
         ]);
     }
 
@@ -93,7 +102,6 @@ class GroupController extends AbstractController
         * @var User
         */
         $user = $this->getUser();
-
         $group = new Group();
         $form = $this->createForm(GroupType::class, $group);
         $form->handleRequest($request);

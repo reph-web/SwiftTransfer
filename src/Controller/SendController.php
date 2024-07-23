@@ -76,6 +76,7 @@ class SendController extends AbstractController
             'controller_name' => 'SendController',
             'form' => $transactionForm->createView(),
             'balance' =>  $user->getBalance(),
+            'contacts' => $user->getContact(), // Sent to twig, for special page if user dont have contacts
         ]);
     }
 }

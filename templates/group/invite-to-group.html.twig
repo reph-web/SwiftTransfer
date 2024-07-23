@@ -3,11 +3,18 @@
 {% block title %}Swift Transfer - Create group{% endblock %}
 
 {% block body %}
-    <h1 class="text-3xl text-center mt-16">Add contact to {{group.name}}</h1>
+{% if contacts is empty %}
 
-<div class="flex justify-center items-center mt-16 bg-gray-100">
-    <div class="w-full max-w-md p-8 bg-white shadow-md rounded-2xl text-lg" 
-    {{ react_component('Group/GroupInvite', {'groupId' : group.id}) }}>
+    <p class="text-center text-3xl font-semibold mt-16">No contact found, you can only add your contact to your group</p>
+    <p class="text-center text-xl mt-4 w-96 mx-auto">You can add people to your contacts by going to their profile and clicking on 'add to contact'. 
+                                    To find people, you can search via the <a class="text-purple-700 cursor-pointer"href="{{ path('app_search') }}">search page</a>.
+    </p>
+{% else %}
+    <h1 class="text-3xl text-center mt-16">Add contact to {{group.name}}</h1>
+    <div class="flex justify-center items-center mt-16 bg-gray-100">
+        <div class="w-full max-w-md p-8 bg-white shadow-md rounded-2xl text-lg" 
+        {{ react_component('Group/GroupInvite', {'groupId' : group.id}) }}>
+        </div>
     </div>
-</div>
+{% endif %}
 {% endblock %}
