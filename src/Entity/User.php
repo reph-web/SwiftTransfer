@@ -80,6 +80,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'user')]
     private Collection $notifications;
 
+    /**
+     * @var Collection<int, Billing>
+     */
+    #[ORM\OneToMany(targetEntity: Billing::class, mappedBy: 'user')]
+    private Collection $billings;
+
     public function __construct()
     {
         $this->contact = new ArrayCollection();
@@ -87,6 +93,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->transactions_sended = new ArrayCollection();
         $this->transactions_received = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->billings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -365,6 +372,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($notification->getUser() === $this) {
                 $notification->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Billing>
+     */
+    public function getBillings(): Collection
+    {
+        return $this->billings;
+    }
+
+    public function addBilling(Billing $billing): static
+    {
+        if (!$this->billings->contains($billing)) {
+            $this->billings->add($billing);
+            $billing->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBilling(Billing $billing): static
+    {
+        if ($this->billings->removeElement($billing)) {
+            // set the owning side to null (unless already changed)
+            if ($billing->getUser() === $this) {
+                $billing->setUser(null);
             }
         }
 

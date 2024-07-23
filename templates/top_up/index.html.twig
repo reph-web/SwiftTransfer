@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SwiftTransfer - Top up{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Top-up Balance</title>
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<h1 class="text-3xl text-center m-16">Top up your balance !</h1>
+
+<body>
+    <div class="w-80 mx-auto p-8 bg-white shadow-md rounded-2xl text-lg ">
+            <form class="flex flex-col" id="payment-form">
+                <label for="amount">Amount : </label>
+                <input class="border border-gray-300 mb-8" type="number" id="amount" name="amount" min="1" required>
+                <button class="bg-purple-950 text-white py-2 rounded shadow" type="submit" id="submit">Top-up</button>
+            </form>
+            <div id="stripe"></div>
+            <div id="payment-result"></div>
+        </div>
+    </div>
+
+ <script>
+        document.getElementById('payment-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const amount = document.getElementById('amount').value;
+
+            const response = await fetch('{{ path('create_payment_intent') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    amount: amount,
+                 }),
+            });
+
+            const data = await response.json();
+            if (data.error) {
+                document.getElementById('payment-result').innerText = data.error;
+                return;
+            }
+
+            const stripe = Stripe('{{ stripe_public_key }}');
+            const elements = stripe.elements({clientSecret: data['clientSecret']});
+            const payementElement = elements.create('payment',{
+                style: { 
+                    base: {
+                        iconColor: '#9333ea',
+                        color: '#fff',
+                        fontSize: '16px',
+                        border : '1px',
+                        borderColor : '#d1d5db',
+                        borderRadius: '0.25rem',
+                    },
+                    invalid: {
+                        iconColor: '#FFC7EE',
+                        color: '#FFC7EE',
+                    },
+                }
+            });
+            payementElement.mount('#stripe');
+            document.getElementById('payment-form').style.display = 'none';
+
+            const { error } = await stripe.confirmCardPayment(data.clientSecret, {
+                payment_method: {
+                    card: cardElement,
+                },
+            });
+
+            if (error) {
+                document.getElementById('payment-result').innerText = error.message;
+            } else {
+                const successResponse = await fetch('{{ path('payment_success') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ amount: amount }),
+                });
+                
+                const successData = await successResponse.json();
+                document.getElementById('card-element').style.display = 'none';
+                document.getElementById('payment-result').innerText = successData.success || successData.error;
+            }
+        });
+    </script>
+</body>
+</html>
+{% endblock %}

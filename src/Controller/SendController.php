@@ -11,6 +11,7 @@ use App\Entity\Transaction;
 use App\Form\TransactionType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\User;
 
 class SendController extends AbstractController
 {

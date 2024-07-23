@@ -6,7 +6,6 @@ use App\Entity\Group;
 use App\Entity\User;
 use App\Form\GroupType;
 use App\Repository\GroupRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
