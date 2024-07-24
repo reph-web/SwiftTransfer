@@ -26,13 +26,13 @@ class RegistrationFormType extends AbstractType
                 ]),
                 new Length([
                     'min' => 3,
-                    'max' => 40,
+                    'max' => 30,
                     'minMessage' => 'Your username should be at least {{ limit }} characters',
-                    'maxMessage' => 'Your username is limited to {{ limit }} characters.'
+                    'maxMessage' => 'Your username is limited to {{ limit }} characters',
                 ]),
                 new Regex([
                     'pattern' => '/^[a-z0-9]+(?:_[a-z0-9]+)*$/',
-                    'message' => 'Username should only contain lowercase letter, digits and no consecutive underscores.'
+                    'message' => 'Username should only contain lowercase letter, digits and no consecutive underscores or underscore on beginning.'
                 ])
             ]])
             ->add('displayedName', TextType::class, ['constraints' =>[
@@ -41,7 +41,7 @@ class RegistrationFormType extends AbstractType
                 ]),
                 new Length([
                     'min' => 2,
-                    'max' => 40,
+                    'max' => 30,
                     'minMessage' => 'Your name should be at least {{ limit }} characters',
                     'maxMessage' => 'Your name is limited to {{ limit }} characters.'
                 ]),
@@ -64,11 +64,29 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Please enter a password',
                     ]),
                     new Length([
-                        'min' => 1,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'min' => 10,
                         // max length allowed by Symfony for security reasons
                         'max' => 255,
+                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        'maxMessage' => 'Your password should limited to {{ limit }} characters',
                     ]),
+                    new Regex([
+                        'pattern' => '/[0-9]/',
+                        'message' => 'Your password should have at least one digit'
+                    ]),
+                    new Regex([
+                        'pattern' => '/[a-z]/',
+                        'message' => 'Your password should have at least one lowercase letter'
+                    ]),
+                    new Regex([
+                        'pattern' => '/[A-Z]/',
+                        'message' => 'Your password should have at least one uppercase letter'
+                    ]),
+                    new Regex([
+                        'pattern' => '/[@*!&_#$%+-]/',
+                        'message' => 'Your password should have at least one special character (@, *, !, &, _, #, $, %, + or -)'
+                    ]),
+
                 ],
             ])
         ;
