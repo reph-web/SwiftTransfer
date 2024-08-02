@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import GroupNameModifier from './GroupNameModifier';
+import React from 'react';
 
 export default function (props) {
     // Function to handle the deletion of a member

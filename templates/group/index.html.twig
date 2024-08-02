@@ -39,7 +39,8 @@
                     </div>
                     <div class="ml-4">
                         {% if app.user.id == firstGroupDisplayed.owner.id %}
-                            <div  {{ react_component('Group/GroupNameModifier', {
+                            <div  {{ react_component('Group/GroupTextModifier', {
+                                'type' : 'Name',
                                 'value' : firstGroupDisplayed.name,
                                 'id' : firstGroupDisplayed.id,
                             })}}>
@@ -55,9 +56,13 @@
                         </br>
                         <span class=" text-gray-700 text-xl font-semibold">Group description:</span>
                         {% if app.user.id == firstGroupDisplayed.owner.id %}
-                        <button id="changeDesc">⚙️</button>
+                        <div {{ react_component('Group/GroupTextModifier', {
+                                'type' : 'Description',
+                                'value' : firstGroupDisplayed.description,
+                                'id' : firstGroupDisplayed.id,
+                            })}}>
+                        </div>
                         {% endif %}
-                        <p>{{firstGroupDisplayed.description}}</p>
                     </div>
                 </div>
             </div>
@@ -95,22 +100,5 @@
             </a>
         </div>
     </div>
-
-    <script>
-    
-    // const BtnName = document.querySelector("#changeName");
-    // const BtnDesc = document.querySelector("#changeDesc");
-
-    // if(BtnName || BtnDesc){
-    //     BtnName.addEventListener('click', (e)=>{
-            
-    //     });
-    //     BtnDesc.addEventListener('click', ()=>{
-
-    //     });
-    // }
-
-
-    </script>
 
     {% endblock %}

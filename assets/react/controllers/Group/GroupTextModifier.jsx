@@ -23,8 +23,9 @@ export default function (props) {
             let newValue = document.querySelector(`[id="${'input' + uniqueId}"]`).value;
             setValue(newValue);
 
-            // Use the api to reflect the new name in db
-            fetch('/api/change-group-name', {
+            // Use the api to reflect the new name in db, if type is name, calling changing group
+            // name api, else changing description
+            fetch(props.type == 'name' ? '/api/change-group-name' : '/api/change-group-description', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -47,12 +48,45 @@ export default function (props) {
             setModal(null);
             document.removeEventListener('click', closeModal);
         }
+        let typeInput = null;
+        if(props.type == 'Name'){
+            typeInput = <input id={'input' + uniqueId} className=' text-2xl rounded-lg border-2 border-purple-500' defaultValue={value}
+                style={{
+                    width: '60%',
+                    margin: '2rem 20%'
+                }}
+            />
+        }else{
+            typeInput = <textarea id={'input' + uniqueId} className=' text-2xl rounded-lg border-2 border-purple-500' defaultValue={value}
+            style={{
+                width: '60%',
+                margin: '2rem 20%'
+            }}></textarea>
+            }
 
         return (
-            <div id={'modal' + uniqueId} className="fixed flex items-center justify-center bg-gray-900 bg-opacity-50">
-                <div id={'contentBox' + uniqueId} className="flex flex-col justify-between w-72 bg-white rounded-xl p-4">
-                    <div className='text-xl text-center font-semibold mt-4'>Group Name</div>
-                    <input id={'input' + uniqueId} className='mx-auto my-6 pl-2 text-2xl rounded-lg border-2 border-purple-500' defaultValue={value} />
+            // Removed some TailwindCSS classes because it DIDN'T work on thoses particular elements, but style do
+            <div id={'modal' + uniqueId} style={{
+                backgroundColor: 'rgba(17, 24, 39, 0.5)', 
+                zIndex: '50', 
+                top: '0', 
+                left :'0',
+                position: 'fixed',
+                height: '100%',
+                width: '100%',
+                display : 'flex',
+                flexWrap: 'nowrap',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <div id={'contentBox' + uniqueId} className="rounded-lg bg-white"
+                    style ={{
+                        width: '30%',
+                    }}>
+                    <h2 className='text-2xl mt-2 text-center font-semibold'>Group {props.type}</h2>
+
+                    {typeInput}
+                    
                     <div className='flex justify-center mb-4'>
                         <button id="confirmModalBtn" className="bg-purple-500 text-white text-lg px-5 py-1 rounded-lg mr-4" onClick={confirmHandler}>Confirm</button>
                         <button id="cancelModalBtn" className="bg-red-600 text-white text-lg px-5 py-1 rounded-lg ml-4" onClick={cancelHandler}>Cancel</button>
@@ -66,7 +100,7 @@ export default function (props) {
     return (
         <>
             {modal}
-            <span className='text-gray-700 font-semibold text-2xl ml-2'>{value}</span>
+            <span className={`text-gray-700 ${props.type === 'Name' ? 'font-semibold text-2xl' : 'text-lg font-regular'} ml-2`}>{value}</span>
             <button className='ml-2' id={'modalOpener' + uniqueId} onClick={() => { setModal(<Modal />); }}>⚙️</button>
         </>
     );

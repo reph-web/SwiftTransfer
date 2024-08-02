@@ -23,9 +23,6 @@ class Notification
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column]
-    private ?bool $isRead = null;
-
     #[ORM\Column(nullable: true)]
     private ?int $isGroupId = null;
 
@@ -69,19 +66,6 @@ class Notification
 
         return $this;
     }
-
-    public function isRead(): ?bool
-    {
-        return $this->isRead;
-    }
-
-    public function setRead(bool $isRead): static
-    {
-        $this->isRead = $isRead;
-
-        return $this;
-    }
-
     public function getIsGroupId(): ?int
     {
         return $this->isGroupId;

@@ -31,23 +31,6 @@ class ApiController extends AbstractController
         return $this->json(json_encode($cleanedResult));
     }
 
-    #[Route('/group-search', name: 'app_groupSearch', methods: ['GET'])]
-    public function groupSearch(): JsonResponse
-    {
-        /**
-         * @var User
-         */
-        $user = $this->getUser();
-        $result = $user->getGroups();
-        $cleanedResult = [];
-        foreach($result as $group){
-            if($group->getOwner() == $user){
-                $cleanedResult[] = $group->getName();
-            }
-        }
-        return $this->json(json_encode($cleanedResult));
-    }
-
     #[Route('/add-contact', name: 'app_addContact', methods: ['POST'])]
     public function addContact(Request $request, UserRepository $userRepo, EntityManagerInterface $em): JsonResponse
     {
@@ -228,6 +211,10 @@ class ApiController extends AbstractController
         if($user != $group->getOwner()){
             return new JsonResponse(['error' => 'You are not the owner'], 403);
         }
+
+        //Check if invited is already invited
+
+
         
         // Send notification to user to ask him to join
         $notif = new Notification;
@@ -235,7 +222,6 @@ class ApiController extends AbstractController
         $notif->setContent($user->getDisplayedName().' has invited you to '.$group->getName());
         $notif->setIsGroupId($group->getId());
         $notif->setUser($userInvited);
-        $notif->setRead(false);
 
         $em->persist($notif);
         $em->flush(); 
@@ -313,21 +299,5 @@ class ApiController extends AbstractController
             }
         }
         return new JsonResponse(['error' => 'Invite does not exist'], 404);
-    }
-
-    #[Route('/notification-read-change', name: 'app_notificationReadChange', methods: ['PATCH'])]
-    public function NotificationreadChange(Request $request, NotificationRepository $notifRepo, EntityManagerInterface $em): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $notificationId = $data['notificationId'];
-        $notification = $notifRepo->find($notificationId);
-
-        if(!$notification){
-            return new JsonResponse(['error' => 'This notification does not exist'], 404);
-        }
-
-        $notification->setRead($data['state']);
-        dd($data['state']);
-        return new JsonResponse(['status' => 'Read state changed'], 200);
     }
 }

@@ -39,11 +39,11 @@ export default function (props) {
     };
     
     return (
-        <div class="flex place-content-center space-x-4 mx-auto">
+        <div className="flex place-content-center space-x-4 mx-auto">
             {isInContactList ? (
-                    <button class="bg-purple-600 text-white px-4 py-2 rounded-full" onClick={removeContact}>Remove from contact list</button>
+                    <button className="bg-purple-600 text-white px-4 py-2 rounded-full" onClick={removeContact}>Remove from contact list</button>
             ) : (
-                    <button class="bg-purple-600 text-white px-4 py-2 rounded-full" onClick={addContact}>Add to Contact List</button>
+                    <button className="bg-purple-600 text-white px-4 py-2 rounded-full" onClick={addContact}>Add to Contact List</button>
             )}
         </div>
     );

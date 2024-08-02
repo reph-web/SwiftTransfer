@@ -24,7 +24,7 @@
                     {% for user in pagination %}
                     <a href="{{ path('app_profile', {'username' : user.username}) }}">
                         <li class='mt-3 bg-purple-500 rounded-2xl text-white mx-24' key={{user.username}}>
-                            <img src="{{ asset('build/images/avatar/' ~ app.user.avatar) }}" class='inline-block h-6 w-6 rounded-full mx-2 mb-1'/>
+                            <img src="{{ asset('build/images/avatar/' ~ user.avatar) }}" class='inline-block h-6 w-6 rounded-full mx-2 mb-1'/>
                             <span class='font-semibold'>{{ user.displayedName }}
                                 <span class='ml-2 font-normal text-md'>@{{ user.username }}</span>
                             </span>

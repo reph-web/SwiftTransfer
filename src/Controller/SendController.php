@@ -54,14 +54,12 @@ class SendController extends AbstractController
             $sender_notif->setUser($sender);
             $sender_notif->setType('transaction');
             $sender_notif->setContent('You sent $'.$amount.' to '.$receiver->getDisplayedName());
-            $sender_notif->setRead(false);
 
 
             $receiver_notif = new Notification;
             $receiver_notif->setUser($receiver);
             $receiver_notif->setType('transaction');
             $receiver_notif->setContent('You received $'.$amount.' from '.$sender->getDisplayedName());
-            $receiver_notif->setRead(false);
 
             // Persist in db
             $entityManager->persist($sender);
@@ -70,12 +68,12 @@ class SendController extends AbstractController
             $entityManager->persist($receiver_notif);
             $entityManager->flush();
             
-            return $this->redirectToRoute('app_send');
+            return $this->redirectToRoute('app_home');
         }
 
         return $this->render('send/index.html.twig', [
             'controller_name' => 'SendController',
-            'form' => $transactionForm->createView(),
+            'form' => $transactionForm,
             'balance' =>  $user->getBalance(),
             'contacts' => $user->getContact(), // Sent to twig, for special page if user dont have contacts
         ]);

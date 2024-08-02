@@ -90,10 +90,10 @@
                                     <a href="{{ path('app_profile', {'username' : app.user.username}) }}" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('app_logout') }}" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+                                    <a href="{{ path('app_notification') }}" class="block px-4 py-2 hover:bg-gray-100">Notifications</a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('app_notification') }}" class="block px-4 py-2 hover:bg-gray-100">Notifications</a>
+                                    <a href="{{ path('app_logout') }}" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
                                 </li>
                             </ul>
                         </div>
@@ -145,5 +145,24 @@
                 })
         </script>
         {% block body %}{% endblock %}
+        <footer class="bg-purple-500 py-4 flex justify-center mt-16">
+            <div class="flex text-white mx-2">
+                <img style="height: 25px; width: 25px; object-fit: cover;" src="https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png"/>
+                <span class="text-xl ml-2 mb-1">
+                    <a href="https://x.com">Twitter</a>
+                </span>
+            </div>
+            <div class="flex text-white mx-2">
+                <img style="height: 25px; width: 25px; object-fit: cover;" src="https://static.cdninstagram.com/rsrc.php/v3/yR/r/lam-fZmwmvn.png"/>
+                <span class="text-xl ml-2 mb-1">
+                    <a href="https://www.instagram.com">Instagram</a>
+                </span>
+            </div>
+            <div class="text-white mx-1">
+                <span class="text-xl ml-1 mb-1"> 
+                    <a href="{{ path('app_terms') }}">📚 Terms </a>
+                </span>
+            </div>
+        </footer>
     </body>
 </html>
