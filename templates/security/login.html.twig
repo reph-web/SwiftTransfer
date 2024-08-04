@@ -4,10 +4,9 @@
 
 {% block body %}
 
-<h1 class="text-3xl text-center mt-16">Log in Swift Transfer</h1>
 
-<div class="flex justify-center items-center mt-16 bg-gray-100">
-
+<div class="flex flex-col h-full items-center">
+<h1 class="text-3xl text-center w-full my-16">Log in Swift Transfer</h1>
     <form method="post" class="w-full max-w-md p-8 bg-white shadow-md rounded-2xl text-lg">
         {% if error %}
             <div class="text-md text-red-500 text-center mb-2">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

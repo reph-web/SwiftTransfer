@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Billing;
 use App\Entity\Group;
 use App\Entity\Notification;
 use App\Entity\Transaction;
@@ -50,6 +51,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Group', 'fa', Group::class);
         yield MenuItem::linkToCrud('Transaction', 'fa', Transaction::class);
         yield MenuItem::linkToCrud('Notification', 'fa', Notification::class);
+        yield MenuItem::linkToCrud('Billing', 'fa', Billing::class);
 
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }

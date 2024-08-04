@@ -16,7 +16,7 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body class="bg-gray-200">
         <nav id="nav" class="bg-purple-500">
             <div class="flex flex-wrap items-center justify-between p-3">
                 <a href="{{ path('app_frontPage') }}" class="flex items-center ml-4 mr-8">
@@ -144,7 +144,11 @@
                     document.querySelector('#menu').classList.toggle('hidden');
                 })
         </script>
-        {% block body %}{% endblock %}
+
+        <div class="h-screen">
+            {% block body %}{% endblock %}
+        </div>
+            
         <footer class="bg-purple-500 pt-2 pb-1 flex justify-center mt-16">
                 <div class="flex text-white mx-2">
                     <img style="height: 25px; width: 25px; object-fit: cover;" src="https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png"/>
