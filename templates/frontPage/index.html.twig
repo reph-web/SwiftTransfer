@@ -1,27 +1,41 @@
 {% extends 'base.html.twig' %}
 {% block title %}Swift Transfer{% endblock %}
 {% block body %}
-    <div class="mx-32 my-16">
+    <div class="mx-28 my-16 h-screen">
         <div class="flex flex-row">
-            <div>
+            <div class="mr-4">
                 <h1 class="text-5xl mb-6 font-medium">Swift Transfer</h1>
                 <p class="text-xl">Welcome to the new era of simplified money transfers. With SwiftTransfer you have the power to send money to your friends, family, or colleagues  in just a few clicks, wherever you are in the world.</p>
-                <div class="text-xl">
-                    <input placeholder="Enter your email" class="border-2 rounded-lg border-purple-500 mt-6 pl-2 py-1" type="text">
-                    <button id="sub-fp" class="bg-purple-500 text-white px-5 py-1 rounded-lg mb-2">
-                        <div>Start now !</div>
+                <div class="flex justify-center my-4">
+                    <button class="bg-purple-950 text-white px-16 pb-2 pt-1 rounded-lg justify-center my-4 text-3xl font-medium">
+                        Start now !
                     </button>
                 </div>
+                <div>
+                    <h2 class="text-3xl font-medium mb-4">Why Choose Us</h2>
+                    <div class="flex space-x-4">
+                        <div class="bg-purple-500 text-white py-6 px-4 rounded-lg shadow-md">
+                            <h3 class="text-xl font-semibold mb-6">Simplified Money Transfers</h3>
+                            <p>
+                                With our intuitive interface, send money to anyone within seconds. No more relying on slow and costly money transfer methods. SwiftTransfer makes money transfers fast and hassle-free.
+                            </p>
+                        </div>
+                        <div class="bg-purple-500 text-white p-6 rounded-lg shadow-md ">
+                            <h3 class="text-xl font-semibold mb-6">Financial Social Network</h3>
+                            <p>
+                                Connect with your friends, family, and colleagues. Add them as contacts for even simpler money transfers. Create groups to share common expenses, like outings with friends, group gifts, or fundraising.
+                            </p>
+                        </div>
+                        <div class="bg-purple-500 text-white p-6 rounded-lg shadow-md ">
+                            <h3 class="text-xl font-semibold mb-6">Exceptional Customer Support</h3>
+                            <p>
+                                Our support team is here to assist you every step of the way. If you have any questions, concerns, or need assistance, we're just a click or call away from providing you with personalized support.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <img src="https://img.freepik.com/vecteurs-libre/concept-collegues-design-plat-pour-page-destination_23-2148296956.jpg">
+            <img class="ml-2" width="450" src="{{ asset('build/images/front_img.png') }}">
         </div>
-
-        <script>
-            document.querySelector('#sub-fp').addEventListener('click', ()=>{
-                window.location.href= 'http://localhost:9000/register/'+ document.querySelector('input').value;
-            })
-
-        </script>
-
     </div>
 {% endblock %}
