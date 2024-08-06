@@ -25,7 +25,7 @@ class SearchController extends AbstractController
         $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1), // Page number (init by 1)
-            10 // limit per page
+            5 // limit per page
         );
         return $this->render('search/index.html.twig', [
             'controller_name' => 'SearchController',

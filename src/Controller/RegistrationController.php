@@ -45,7 +45,7 @@ class RegistrationController extends AbstractController
             $user->setBalance(0);
 
             // set a random default avatar between 3 default avatar
-            $user->setAvatar(rand(0, 3). '.png');
+            $user->setAvatar(rand(0, 2). '.png');
 
             //push to db
             

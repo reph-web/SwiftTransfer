@@ -16,157 +16,139 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body class="bg-gray-200">
-        <nav id="nav" class="bg-purple-500">
-            <div class="flex flex-wrap items-center justify-between p-3">
-                <a href="{{ path('app_frontPage') }}" class="flex items-center ml-4 mr-8">
-                    <img src="{{ asset('build/images/icons/logo.png') }}" class="h-8 mr-3" alt="Swift Transfer Logo" />
-                    <span class="self-center text-2xl font-bold text-white">Swift Transfer</span>
-                </a>
-                <button id="btnMenu" class="flex items-center px-3 py-2 border rounded text-purple-950 border-purple-950 hover:text-white hover:border-white md:hidden">
-                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
-                </button>
-                <div class="hidden w-full block flex-grow md:flex md:items-center md:w-auto" id="menu">
-                    <div class="text-2xl md:flex-grow text-white">
-                        <a href="{{ path('app_home') }}" class="block md:inline-block mt-3 md:mt-0 hover:text-white mr-4">
-                            <span class="md:hidden mr-2">
-                                🏠 
-                            </span>
-                            home
-                        </a>
-                        <a href="{{ path('app_search') }}" class="block md:inline-block hover:text-white mr-4">
-                            <span class="md:hidden mr-2">
-                                🔎
-                            </span>                            
-                            search
-                        </a>
-                        <a href="{{ path('app_contact') }}" class="block md:inline-block hover:text-white mr-4">
-                            <span class="md:hidden mr-2">
-                                📇
-                            </span>                            
-                            contact
-                        </a>
-                        <a href="{{ path('app_send') }}" class="block md:inline-block hover:text-white mr-4">
-                            <span class="md:hidden mr-2">
-                                🤝
-                            </span>    
-                            send
-                        </a>
-                        {% if is_granted("ROLE_ADMIN") %}
-                        <a href="{{ path('app_group') }}" class="block md:inline-block mr-4">
-                            <span class="md:hidden mr-2">
-                                👥
-                            </span>                            
-                            group
-                        </a>
-                        <a href="{{ path('admin') }}" class="block mb-6 md:mb-0 md:inline-block">
-                            <span class="md:hidden mr-2">
-                                🔓
-                            </span>                            
-                            admin panel
-                        </a>
-                        {% else %}
-                        <a href="{{ path('app_group') }}" class="block mb-6 md:mb-0 md:inline-block">
-                            <span class="md:hidden mr-2">
-                                👥
-                            </span>                            
-                            group
-                        </a>
-                        {% endif %}
-
-                    </div>
-                    
-                    {% if app.user %}
-                        <span class="cursor-pointer" id="logged">
-                                <img src="{{ asset('build/images/avatar/' ~ app.user.avatar) }}" class="inline-block h-8 w-8 rounded-full mr-2">
-                                <span class="text-white text-xl font-semibold">{{app.user.displayedName}}</span>
-                                <svg id="dropdownIcon" width="12" height="3" class="hidden md:inline-block">
-                                    <path d="M0 0L3 3L6 0" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"></path>
-                                </svg>
-                        </span>
-                        <div id="dropdownLogged" class="absolute right-0 top-14 w-48 bg-white rounded-md shadow-lg hidden">
-                            <ul class="text-gray-700">
-                                <li>
-                                    <a href="{{ path('app_profile', {'username' : app.user.username}) }}" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('app_notification') }}" class="block px-4 py-2 hover:bg-gray-100">Notifications</a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('app_logout') }}" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
-                                </li>
-                            </ul>
-                        </div>
+<body class="bg-gray-200 flex flex-col min-h-screen">
+    <nav id="nav" class="bg-purple-500">
+        <div class="flex flex-wrap items-center justify-between p-3">
+            <a href="{{ path('app_frontPage') }}" class="flex items-center ml-4 mr-8">
+                <img src="{{ asset('build/images/icons/logo.png') }}" class="h-8 mr-3" alt="Swift Transfer Logo" />
+                <span class="self-center text-2xl font-bold text-white">Swift Transfer</span>
+            </a>
+            <button id="btnMenu" class="flex items-center px-3 py-2 border rounded text-purple-950 border-purple-950 hover:text-white hover:border-white lg:hidden">
+                <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+            </button>
+            <div class="hidden w-full flex-grow lg:flex lg:items-center lg:w-auto" id="menu">
+                <div class="text-2xl lg:flex-grow text-white">
+                    <a href="{{ path('app_home') }}" class="block lg:inline-block mt-3 lg:mt-0 hover:text-white mr-4">
+                        <span class="lg:hidden mr-2">🏠</span> home
+                    </a>
+                    <a href="{{ path('app_search') }}" class="block lg:inline-block hover:text-white mr-4">
+                        <span class="lg:hidden mr-2">🔎</span> search
+                    </a>
+                    <a href="{{ path('app_contact') }}" class="block lg:inline-block hover:text-white mr-4">
+                        <span class="lg:hidden mr-2">📇</span> contact
+                    </a>
+                    <a href="{{ path('app_send') }}" class="block lg:inline-block hover:text-white mr-4">
+                        <span class="lg:hidden mr-2">🤝</span> send
+                    </a>
+                    {% if is_granted("ROLE_ADMIN") %}
+                    <a href="{{ path('app_group') }}" class="block lg:inline-block mr-4">
+                        <span class="lg:hidden mr-2">👥</span> group
+                    </a>
+                    <a href="{{ path('admin') }}" class="block mb-6 lg:mb-0 lg:inline-block">
+                        <span class="lg:hidden mr-2">🔓</span> admin panel
+                    </a>
                     {% else %}
-                        <div>
-                            <a href="{{ path('app_login') }}" class="inline-block text-xl mt-2 px-5 pb-1 border-2 rounded-xl text-white border-purple-950 hover:border-transparent hover:text-purple-700 hover:bg-white md:mt-0 mr-3">Login</a>
-                        </div>
-                        <div>
-                            <a href="{{ path('app_register') }}" class="inline-block text-xl mt-2 px-5 pb-1 border-2 rounded-xl text-white bg-purple-950 border-purple-950 hover:border-transparent hover:text-purple-700 hover:bg-white md:mt-0">Register</a>
-                        </div>
+                    <a href="{{ path('app_group') }}" class="block mb-6 lg:mb-0 lg:inline-block">
+                        <span class="lg:hidden mr-2">👥</span> group
+                    </a>
                     {% endif %}
                 </div>
+                {% if app.user %}
+                    <span class="cursor-pointer" id="logged">
+                        <img src="{{ asset('build/images/avatar/' ~ app.user.avatar) }}" class="inline-block h-8 w-8 rounded-full mr-2">
+                        <span class="text-white text-xl font-semibold">{{ app.user.displayedName }}</span>
+                        <svg id="dropdownIcon" width="12" height="3" class="hidden lg:inline-block">
+                            <path d="M0 0L3 3L6 0" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"></path>
+                        </svg>
+                    </span>
+                    <div id="dropdownLogged" class="absolute right-0 top-14 w-48 bg-white rounded-md shadow-lg hidden">
+                        <ul class="text-gray-700">
+                            <li>
+                                <a href="{{ path('app_profile', {'username': app.user.username}) }}" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('app_notification') }}" class="block px-4 py-2 hover:bg-gray-100">Notifications</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('app_logout') }}" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <div>
+                        <a href="{{ path('app_login') }}" class="inline-block text-xl mt-2 px-5 pb-1 border-2 rounded-xl text-white border-purple-950 hover:border-transparent hover:text-purple-700 hover:bg-white lg:mt-0 mr-3">Login</a>
+                    </div>
+                    <div>
+                        <a href="{{ path('app_register') }}" class="inline-block text-xl mt-2 px-5 pb-1 border-2 rounded-xl text-white bg-purple-950 border-purple-950 hover:border-transparent hover:text-purple-700 hover:bg-white lg:mt-0">Register</a>
+                    </div>
+                {% endif %}
             </div>
-        </nav>
-
-        <script>
-                // if user logged, make the logged dropdown working
-                if(document.querySelector('#logged')){
-  
-                    const loggedBtn = document.querySelector('#logged')
-                    const loggedDropdown = document.querySelector('#dropdownLogged')
-
-                    // 768px = md in tailwind
-                    const mdMediaSize = window.matchMedia("(max-width: 768px)");
-
-                    // toggle dropdown if clicked
-                    loggedBtn.addEventListener('click', () => {
-                        //if the view is md, dropdown doesnt work
-                        if(!mdMediaSize.matches) {
-                            loggedDropdown.classList.toggle('hidden');
-                        }else{
-                            {% if app.user %}
-                            window.location.href = "{{ path('app_profile', {'username': app.user.username}) | escape('js') }}";
-                            {% endif %}
-                        }
-                    })
-
-                    // dismiss dropdown if clicking outside of the loggedBtn
-                    document.addEventListener('click', (e) => {
-                        if(!loggedBtn.contains(e.target)){
-                            loggedDropdown.classList.add('hidden');
-                        }
-                    })
-                }
-
-                //make the burger menu working
-                document.querySelector('#btnMenu').addEventListener('click', () => {
-                    document.querySelector('#menu').classList.toggle('hidden');
-                })
-        </script>
-
-        <div class="h-screen">
-            {% block body %}{% endblock %}
         </div>
-            
-        <footer class="bg-purple-500 pt-2 pb-1 flex justify-center mt-16">
-                <div class="flex text-white mx-2">
-                    <img style="height: 25px; width: 25px; object-fit: cover;" src="https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png"/>
-                    <span class="text-xl ml-2 mb-1">
-                        <a href="https://x.com">Twitter</a>
-                    </span>
-                </div>
-                <div class="flex text-white mx-2">
-                    <img style="height: 25px; width: 25px; object-fit: cover;" src="https://static.cdninstagram.com/rsrc.php/v3/yR/r/lam-fZmwmvn.png"/>
-                    <span class="text-xl ml-2 mb-1">
-                        <a href="https://www.instagram.com">Instagram</a>
-                    </span>
-                </div>
-                <div class="text-white mx-1">
-                    <span class="text-xl ml-1 mb-1"> 
-                        <a href="{{ path('app_terms') }}">📚 Terms </a>
-                    </span>
-                </div>
-        </footer>
-    </body>
+    </nav>
+
+    <script>
+        // if user logged, make the logged dropdown working
+        if (document.querySelector('#logged')) {
+            const loggedBtn = document.querySelector('#logged');
+            const loggedDropdown = document.querySelector('#dropdownLogged');
+
+            // 768px = md in tailwind
+            const mdMediaSize = window.matchMedia("(max-width: 768px)");
+
+            // toggle dropdown if clicked
+            loggedBtn.addEventListener('click', () => {
+                // if the view is md, dropdown doesnt work
+                if (!mdMediaSize.matches) {
+                    loggedDropdown.classList.toggle('hidden');
+                } else {
+                    {% if app.user %}
+                    window.location.href = "{{ path('app_profile', {'username': app.user.username}) | escape('js') }}";
+                    {% endif %}
+                }
+            });
+
+            // dismiss dropdown if clicking outside of the loggedBtn
+            document.addEventListener('click', (e) => {
+                if (!loggedBtn.contains(e.target)) {
+                    loggedDropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        // make the burger menu working
+        document.querySelector('#btnMenu').addEventListener('click', () => {
+            document.querySelector('#menu').classList.toggle('hidden');
+        });
+    </script>
+
+    <div class="flex-grow container mx-auto px-4">
+        {% block body %}{% endblock %}
+    </div>
+
+    <footer class="bg-purple-500 pt-2 pb-1 flex justify-center mt-16 z-10">
+        <div class="flex text-white mx-2">
+            <img style="height: 25px; width: 25px; object-fit: cover;" src="https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png"/>
+            <span class="text-xl ml-2 mb-1">
+                <a href="https://x.com">Twitter</a>
+            </span>
+        </div>
+        <div class="flex text-white mx-2">
+            <img style="height: 25px; width: 25px; object-fit: cover;" src="https://static.cdninstagram.com/rsrc.php/v3/yR/r/lam-fZmwmvn.png"/>
+            <span class="text-xl ml-2 mb-1">
+                <a href="https://www.instagram.com">Instagram</a>
+            </span>
+        </div>
+        <div class="text-white mx-1">
+            <span class="text-xl ml-1 mb-1">
+                <a href="mailto:contact@swifttransfer.com">Mail</a>
+            </span>
+        </div>
+        <div class="text-white mx-1">
+            <span class="text-xl ml-1 mb-1">
+                <a href="{{ path('app_terms') }}">📚 Terms</a>
+            </span>
+        </div>
+    </footer>
+</body>
 </html>
+
