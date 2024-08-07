@@ -41,7 +41,7 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('SwiftTransfer');
+            ->setTitle('<a href="/home" style="text-decoration: none; color: inherit;">SwiftTransfer</a>');
     }
 
     public function configureMenuItems(): iterable

@@ -142,10 +142,10 @@ class ApiController extends AbstractController
             return new JsonResponse(['error' => 'You are not the owner'], 403);
         }
         
-        $group->setName($data['name']);
+        $group->setName($data['value']);
         $em->persist($group);
         $em->flush();
-        return new JsonResponse(['status' => 'Resource updated, new name :'.$data['name']], 200);
+        return new JsonResponse(['status' => 'Resource updated, new name :'.$data['value']], 200);
     }
 
     #[Route('/change-group-description', name: 'app_changeGroupDescription', methods: ['PATCH'])]
@@ -162,10 +162,10 @@ class ApiController extends AbstractController
             return new JsonResponse(['error' => 'You are not the owner'], 403);
         }
 
-        $group->setDescription($data['description']);
+        $group->setDescription($data['value']);
         $em->persist($group);
         $em->flush();
-        return new JsonResponse(['status' => 'Resource updated'], 200);
+        return new JsonResponse(['status' => 'Resource updated, new name :'.$data['value']], 200);
     }
 
     #[Route('/delete-group', name: 'app_deleteGroup', methods: ['DELETE'])]
@@ -254,7 +254,7 @@ class ApiController extends AbstractController
         return new JsonResponse(['error' => 'Invite does not exist'], 404);
     }
 
-    #[Route('/remove-invite-group', name: 'app_removeInviteGroup', methods: ['DELETE'])]
+    #[Route('/remove-user-group', name: 'app_removeUserGroup', methods: ['DELETE'])]
     public function removeUserGroup(Request $request, GroupRepository $groupRepo, UserRepository $userRepo, EntityManagerInterface $em): JsonResponse
     {
         /**
@@ -264,7 +264,7 @@ class ApiController extends AbstractController
 
         //Is user has right to remove
 
-        $groupId = json_decode($request->getContent(), true)['GroupId'];
+        $groupId = json_decode($request->getContent(), true)['groupId'];
         $group = $groupRepo->find($groupId);
         if($group->getOwner() != $user){
             return new JsonResponse(['error' => 'You do not have the right to remove this user'], 403);

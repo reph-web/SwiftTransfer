@@ -25,18 +25,16 @@ export default function (props) {
 
             // Use the api to reflect the new name in db, if type is name, calling changing group
             // name api, else changing description
-            fetch(props.type == 'name' ? '/api/change-group-name' : '/api/change-group-description', {
+            fetch(props.type == 'Name' ? '/api/change-group-name' : '/api/change-group-description', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 method: 'PATCH',
                 body: JSON.stringify({
                     groupId: props.id,
-                    name: newValue
+                    value: newValue
                 })
             })
-                .then(response => response.json())
-                .then(data => console.log(data))
                 .catch(error => console.error('Error:', error));
 
             // Close the modal

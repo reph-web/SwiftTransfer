@@ -84,7 +84,7 @@
             </div>
         </div>
         <!-- Members Section -->
-        <div class="bg-gray-300 p-4 mr-4 ml-6 rounded-xl w-1/6">
+        <div class="bg-gray-300 px-4 py-8 mr-4 ml-6 rounded-xl w-1/6">
             <p class="text-gray-700 mb-4 text-center text-xl font-semibold">Members</p>
             {% for member in firstGroupDisplayed.members %}
             <div class="flex items-center mb-2 bg-white rounded-xl pl-4">
@@ -92,6 +92,22 @@
                 <div>
                     <p class="text-gray-700">{{member.displayedName}}</p>
                     <p class="text-gray-500">@{{member.username}}</p>
+
+                    {% if member.username != firstGroupDisplayed.owner %}
+                    <a class="bg-red-500 rounded-lg px-2 ml-2 text-white cursor-pointer"
+                        onclick="fetch('/api/remove-user-group',{
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    method: 'DELETE',
+                                    body: JSON.stringify({
+                                        groupId: '{{firstGroupDisplayed.id}}',
+                                        memberUsername: '{{member.userName}}'
+                                    })
+                                })
+                                .catch(error => console.error('Error:', error));"
+                        >Remove</a>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}
@@ -100,5 +116,4 @@
             </a>
         </div>
     </div>
-
     {% endblock %}

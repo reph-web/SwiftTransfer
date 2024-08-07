@@ -12,12 +12,6 @@ export default function (props) {
                 groupId: props.id,
             })
         })
-        .then(response => {
-            if (!response.ok) {
-                console.log(response)
-            }
-            return response.json();
-        })
         .catch(error => {
             console.error('Error:', error);
         });
