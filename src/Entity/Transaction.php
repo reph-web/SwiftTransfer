@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TransactionRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
@@ -26,19 +24,12 @@ class Transaction
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    /**
-     * @var Collection<int, Group>
-     */
-    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'transactions')]
-    private Collection $related_group;
+    #[ORM\ManyToOne(targetEntity: Group::class, inversedBy: 'transactions')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Group $related_group = null;
 
     #[ORM\Column]
     private ?float $amount = null;
-
-    public function __construct()
-    {
-        $this->related_group = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -81,26 +72,14 @@ class Transaction
         return $this;
     }
 
-    /**
-     * @return Collection<int, Group>
-     */
-    public function getRelatedGroup(): ?Collection
+    public function getRelatedGroup(): ?Group
     {
         return $this->related_group;
     }
 
-    public function addRelatedGroup(Group $relatedGroup): static
+    public function setRelatedGroup(?Group $relatedGroup): static
     {
-        if (!$this->related_group->contains($relatedGroup)) {
-            $this->related_group->add($relatedGroup);
-        }
-
-        return $this;
-    }
-
-    public function removeRelatedGroup(Group $relatedGroup): static
-    {
-        $this->related_group->removeElement($relatedGroup);
+        $this->related_group = $relatedGroup;
 
         return $this;
     }

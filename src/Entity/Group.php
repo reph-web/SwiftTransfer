@@ -39,7 +39,7 @@ class Group
     /**
      * @var Collection<int, Transaction>
      */
-    #[ORM\ManyToMany(targetEntity: Transaction::class, mappedBy: 'related_group')]
+    #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'related_group')]
     private Collection $transactions;
 
     public function __construct()
@@ -137,18 +137,21 @@ class Group
     {
         if (!$this->transactions->contains($transaction)) {
             $this->transactions->add($transaction);
-            $transaction->addRelatedGroup($this);
+            $transaction->setRelatedGroup($this);
         }
-
+    
         return $this;
     }
-
+    
     public function removeTransaction(Transaction $transaction): static
     {
         if ($this->transactions->removeElement($transaction)) {
-            $transaction->removeRelatedGroup($this);
+            // Set the owning side to null (unless already changed)
+            if ($transaction->getRelatedGroup() === $this) {
+                $transaction->setRelatedGroup(null);
+            }
         }
-
+    
         return $this;
     }
 

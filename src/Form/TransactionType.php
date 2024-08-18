@@ -48,7 +48,6 @@ class TransactionType extends AbstractType
                 'class' => Group::class,
                 'choice_label' => 'name',
                 'choices' => $user->getGroups(),
-                'multiple' => true,
                 'required' => false
             ])
         ;
