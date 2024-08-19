@@ -49,7 +49,7 @@
                 {% for transac in transactions|reverse %}
                     <li class="mt-3 border border-purple-500 shadowm-md rounded-2xl p-2 text-center">
                         <span class="font-semibold text-xl">
-                            <span class="{{ transac.sender.username == app.user.username ? 'text-purple-500' }}">
+                            <span class="">
                                 {{ transac.sender.username == app.user.username ? "You" : transac.sender.username }} 
                             </span>
                             ➡️
