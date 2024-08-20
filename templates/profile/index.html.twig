@@ -4,8 +4,6 @@
 
 {% block body %}
 
-
-
 <div class="flex items-center justify-center overflow-y-scroll mt-16">
 
     {# Avatar, username and displayed name section #}
@@ -15,7 +13,9 @@
             <img src="{{ asset('build/images/avatar/' ~ user.avatar) }}" class="w-28 border-2 border-purple-600 rounded-full">
             <div class="ml-4">
                 <div class="bg-white rounded-xl pb-1 mb-2 w-100 border border-purple-500">
-                    <div class="text-gray-700 font-semibold text-2xl mx-2">{{ user.displayedName}}</div>
+                    <div class="text-gray-700 font-semibold text-2xl mx-2">
+                         <div {{ react_component('User/UserInfoModify', { 'type': 'Name', 'value': user.displayedName, 'username': user.username }) }}></div>
+                    </div>
                     <div class="text-gray-700 font-regular text-md ml-2">@{{ user.username}}</div>
                 </div>
             </div>
@@ -23,12 +23,13 @@
 
         {# Bio section #}
         <h2 class="text-gray-700 text-2xl">Bio :<h2>
+        {# <div {{ react_component('UserInfoModify', { 'type': 'Bio', 'value' : user.bio, 'username': user.username }) }}> #}
         <div class="bg-white p-4 rounded-lg mb-4 border border-purple-500">
             <p class="text-gray-700 text-xl {{ app.user.bio ?: 'text-center' }}">
             {% if user.bio is null %}
-                <i>This user don't have bio</i>
+                 <span {{ react_component('User/UserInfoModify', { 'type': 'Bio', 'value': 'This user don\'t have bio', 'username': user.username }) }}></span>
             {% else %}
-                {{ user.bio }}
+                <div {{ react_component('User/UserInfoModify', { 'type': 'Bio', 'value': user.bio, 'username': user.username }) }}></div>
             {% endif %}
             </p>
         </div>

@@ -12,13 +12,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
 #[Route('/api', name: 'app_api')]
 class ApiController extends AbstractController
 {
     #[Route('/user-search/{searchedUser?}', name: 'app_userSearch', methods: ['GET'])]
-    public function userSearch($searchedUser, UserRepository $userRepo): JsonResponse
+    public function userSearch($searchedUser, HtmlSanitizerInterface $htmlSanitizer, UserRepository $userRepo): JsonResponse
     {
+        $searchedUser = $htmlSanitizer->sanitize($searchedUser);
         $result = $userRepo->findBySearchBar($searchedUser);
         $cleanedResult = [];
         foreach($result as $user){
@@ -32,7 +34,7 @@ class ApiController extends AbstractController
     }
 
     #[Route('/add-contact', name: 'app_addContact', methods: ['POST'])]
-    public function addContact(Request $request, UserRepository $userRepo, EntityManagerInterface $em): JsonResponse
+    public function addContact(Request $request, UserRepository $userRepo, EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
     {
         //Fetch data from query
         $data = json_decode($request->getContent(), true);
@@ -42,7 +44,7 @@ class ApiController extends AbstractController
         * @var User
         */
         $user = $this->getUser();
-        $contact = $userRepo->findOneBy(['username' => $data['contactUsername']]);
+        $contact = $userRepo->findOneBy(['username' => $htmlSanitizer->sanitize($data['contactUsername'])]);
 
         // Return error if user try to add himself as contact
         if($user == $contact){
@@ -79,7 +81,6 @@ class ApiController extends AbstractController
         $result = $user->getContact();
         $cleanedResult = [];
         foreach($result as $contact){
-
                 $cleanedResult[] = array(
                     'displayedName' => $contact->getDisplayedName(),
                     'username' => $contact->getUsername(),
@@ -94,7 +95,7 @@ class ApiController extends AbstractController
     }
 
     #[Route('/remove-contact', name: 'app_removeContact', methods: ['POST'])]
-    public function removeContact(Request $request, UserRepository $userRepo, EntityManagerInterface $em): JsonResponse
+    public function removeContact(Request $request, UserRepository $userRepo, EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
     {
         // Fetch data from query
         $data = json_decode($request->getContent(), true);
@@ -104,7 +105,7 @@ class ApiController extends AbstractController
         * @var User
         */
         $user = $this->getUser();
-        $contact = $userRepo->findOneBy(['username' => $data['contactUsername']]);
+        $contact = $userRepo->findOneBy(['username' => $htmlSanitizer->sanitize($data['contactUsername'])]);
 
         // Return error if user try to add himself as contact
         if($user == $contact){
@@ -130,10 +131,10 @@ class ApiController extends AbstractController
     }
 
     #[Route('/change-group-name', name: 'app_changeGroupName', methods: ['PATCH'])]
-    public function changeGroupName(Request $request, GroupRepository $groupRepo, EntityManagerInterface $em): JsonResponse
+    public function changeGroupName(Request $request, GroupRepository $groupRepo, EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $group = $groupRepo->find($data['groupId']);
+        $group = $groupRepo->find($htmlSanitizer->sanitize($data['groupId']));
 
         if(!$group){
             return new JsonResponse(['error' => 'Group does not exist'], 404);
@@ -149,7 +150,7 @@ class ApiController extends AbstractController
     }
 
     #[Route('/change-group-description', name: 'app_changeGroupDescription', methods: ['PATCH'])]
-    public function changeDescription(Request $request, GroupRepository $groupRepo, EntityManagerInterface $em): JsonResponse
+    public function changeDescription(Request $request, GroupRepository $groupRepo, EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         $groupId = $data['groupId'];
@@ -169,7 +170,7 @@ class ApiController extends AbstractController
     }
 
     #[Route('/delete-group', name: 'app_deleteGroup', methods: ['DELETE'])]
-    public function deleteGroup(Request $request, GroupRepository $groupRepo, EntityManagerInterface $em): JsonResponse
+    public function deleteGroup(Request $request, GroupRepository $groupRepo, EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
     {
         $groupId = json_decode($request->getContent(), true)['groupId'];
         $group = $groupRepo->find($groupId);
@@ -186,11 +187,11 @@ class ApiController extends AbstractController
     }
     
     #[Route('/invite', name: 'app_inviteInGroup', methods: ['POST'])]
-    public function inviteInGroup(Request $request, GroupRepository $groupRepo, UserRepository $userRepo,EntityManagerInterface $em): JsonResponse
+    public function inviteInGroup(Request $request, GroupRepository $groupRepo, UserRepository $userRepo,EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
     {   
         $data = json_decode($request->getContent(), true);
  
-        $group = $groupRepo->find($data['groupId']);
+        $group = $groupRepo->find($htmlSanitizer->sanitize($data['groupId']));
         $userInvited = $userRepo->findOneBy(array('username' => $data['invitedUser']));
 
         // Check if group exist
@@ -231,13 +232,13 @@ class ApiController extends AbstractController
     }
 
     #[Route('/accept-invite', name: 'app_acceptInvite', methods: ['POST'])]
-    public function acceptInvite(Request $request, GroupRepository $groupRepo,EntityManagerInterface $em): JsonResponse
+    public function acceptInvite(Request $request, GroupRepository $groupRepo,EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
     {
         /**
         * @var User
         */
         $user = $this->getUser();
-        $notificationId = json_decode($request->getContent(), true)['notificationId'];
+        $notificationId = $htmlSanitizer->sanitize(json_decode($request->getContent(), true)['notificationId']);
 
 
         // Search if user got an invite
@@ -255,7 +256,7 @@ class ApiController extends AbstractController
     }
 
     #[Route('/remove-user-group', name: 'app_removeUserGroup', methods: ['DELETE'])]
-    public function removeUserGroup(Request $request, GroupRepository $groupRepo, UserRepository $userRepo, EntityManagerInterface $em): JsonResponse
+    public function removeUserGroup(Request $request, GroupRepository $groupRepo, UserRepository $userRepo, EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
     {
         /**
         * @var User
@@ -264,14 +265,14 @@ class ApiController extends AbstractController
 
         //Is user has right to remove
 
-        $groupId = json_decode($request->getContent(), true)['groupId'];
+        $groupId = $htmlSanitizer->sanitize(json_decode($request->getContent(), true)['groupId']);
         $group = $groupRepo->find($groupId);
-        if($group->getOwner() != $user){
-            return new JsonResponse(['error' => 'You do not have the right to remove this user'], 403);
-        }
-    
-        $usernameToRemove = json_decode($request->getContent(), true)['memberUsername'];
+        $usernameToRemove = $htmlSanitizer->sanitize(json_decode($request->getContent(), true)['memberUsername']);
         $userToRemove = $userRepo->findOneBy(['username' => $usernameToRemove]);
+
+        if($group->getOwner() != $user && $user != $userToRemove){
+            return new JsonResponse(['error' => 'You do not have the right to remove this user : u r '.$user.' and the target is '. $userToRemove], 403);
+        }
         $group->removeMember($userToRemove);
         $em->persist($group);
         $em->flush();
@@ -281,13 +282,13 @@ class ApiController extends AbstractController
     }
 
     #[Route('/decline-invite', name: 'app_declineInvite', methods: ['POST'])]
-    public function declineInvite(Request $request, EntityManagerInterface $em): JsonResponse
+    public function declineInvite(Request $request, EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
     {
         /**
         * @var User
         */
         $user = $this->getUser();
-        $notificationId = json_decode($request->getContent(), true)['notificationId'];
+        $notificationId = $htmlSanitizer->sanitize(json_decode($request->getContent(), true)['notificationId']);
 
         //search if user got an invite
         foreach($user->getNotifications() as $notif){
@@ -300,4 +301,44 @@ class ApiController extends AbstractController
         }
         return new JsonResponse(['error' => 'Invite does not exist'], 404);
     }
+
+
+    #[Route('/change-display-name', name: 'app_changeDisplayname', methods: ['PATCH'])]
+    public function changeDisplayName(Request $request, UserRepository $userRepo, EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $user = $userRepo->findOneBy(['username' => $htmlSanitizer->sanitize($data['username'])]);;
+
+        if(!$user){
+            return new JsonResponse(['error' => 'User does not exist'], 404);
+        }
+        if($this->getUser() != $user){
+            return new JsonResponse(['error' => 'You are not the user'], 403);
+        }
+        
+        $user->setDisplayedName($htmlSanitizer->sanitize($data['value']));
+        $em->persist($user);
+        $em->flush();
+        return new JsonResponse(['status' => 'Resource updated, new name :'.$data['value']], 200);
+    }
+
+    #[Route('/change-user-bio', name: 'app_userBio', methods: ['PATCH'])]
+    public function changeUserBio(Request $request, UserRepository $userRepo, EntityManagerInterface $em, HtmlSanitizerInterface $htmlSanitizer): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $user = $userRepo->findOneBy(['username' => $htmlSanitizer->sanitize($data['username'])]);;
+
+        if(!$user){
+            return new JsonResponse(['error' => 'Group does not exist'], 404);
+        }
+        if($this->getUser() != $user){
+            return new JsonResponse(['error' => 'You are not the user'], 403);
+        }
+        
+        $user->setBio($htmlSanitizer->sanitize($data['value']));
+        $em->persist($user);
+        $em->flush();
+        return new JsonResponse(['status' => 'Resource updated, new bio :'.$data['value']], 200);
+    }
+
 }

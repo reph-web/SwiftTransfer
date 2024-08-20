@@ -13,7 +13,7 @@ class Transaction
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'transactions')]
+    #[ORM\ManyToOne(inversedBy: 'transactions_sended')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $sender = null;
 
